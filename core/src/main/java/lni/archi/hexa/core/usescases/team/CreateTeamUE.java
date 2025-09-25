@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CreateTeamUE {
 
-    private ITeamRepoPT teamRepo;
+    private final ITeamRepoPT teamRepo;
 
     public CreateTeamUE(ITeamRepoPT teamRepo) {
         this.teamRepo = teamRepo;
@@ -22,6 +22,8 @@ public class CreateTeamUE {
         try {
             checkParams(name, members);
             return this.teamRepo.createTeam(name, members);
+        } catch (InvalidParamsExeception e) {
+            throw e;
         } catch (Exception e) {
             throw new JobException(e.getMessage());
         }
@@ -35,7 +37,7 @@ public class CreateTeamUE {
             result = false;
             invalidParams = "Name must be between 5 and 20 characters and not null";
         }
-        if (members == null || members.size() <= 5 || members.size() > 11) {
+        if (members == null || members.size() < 6 || members.size() > 11) {
             result = false;
             invalidParams = "Team must have at least 6 person";
         }

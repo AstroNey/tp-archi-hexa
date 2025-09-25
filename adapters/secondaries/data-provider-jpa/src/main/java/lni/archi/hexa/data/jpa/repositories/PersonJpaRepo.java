@@ -14,10 +14,10 @@ public class PersonJpaRepo implements IPersonRepoPT {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @SuppressWarnings("JpaQueryApiInspection")
     @Override
     public PersonDN createPerson(String name, String firstname, int age){
         String strQuery;
-        Object[] result;
         int generatedId;
 
         try {
@@ -31,7 +31,7 @@ public class PersonJpaRepo implements IPersonRepoPT {
                     .setParameter("Age", age)
                     .executeUpdate();
 
-            String selectIdQuery = "SELECT LAST_INSERT_ID() as generatedId";
+            String selectIdQuery = "SELECT personId as generatedId FROM person ORDER BY personId DESC LIMIT 1";
             Query selectQuery = entityManager.createNativeQuery(selectIdQuery);
             generatedId = ((Number) selectQuery.getSingleResult()).intValue();
         } catch (Exception e) {
@@ -56,8 +56,6 @@ public class PersonJpaRepo implements IPersonRepoPT {
             Object[] resultQ = (Object[]) entityManager.createNativeQuery(strQuery.toString())
                     .setParameter("PersonId", id)
                     .getSingleResult();
-            entityManager.clear();
-            entityManager.close();
 
             result.setId((Integer) resultQ[0]);
             result.setName((String) resultQ[1]);
@@ -81,8 +79,6 @@ public class PersonJpaRepo implements IPersonRepoPT {
         try {
             List resultQ = entityManager.createNativeQuery(strQuery.toString())
                     .getResultList();
-            entityManager.clear();
-            entityManager.close();
 
             resultQ.forEach(person -> {
                 Object[] row = (Object[]) person;

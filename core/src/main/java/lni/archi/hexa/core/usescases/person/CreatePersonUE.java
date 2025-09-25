@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 
 public class CreatePersonUE {
 
-    private IPersonRepoPT personRepo;
+    private final IPersonRepoPT personRepo;
 
     public CreatePersonUE(IPersonRepoPT personRepo) {
         this.personRepo = personRepo;
@@ -20,6 +20,8 @@ public class CreatePersonUE {
         try {
             checkParams(firstName, name, age);
             return this.personRepo.createPerson(firstName, name, age);
+        } catch (InvalidParamsExeception e) {
+            throw e;
         } catch (Exception e) {
             throw new JobException(e.getMessage());
         }

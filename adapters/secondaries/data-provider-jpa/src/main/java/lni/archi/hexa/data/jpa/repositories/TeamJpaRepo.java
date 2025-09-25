@@ -29,7 +29,7 @@ public class TeamJpaRepo implements ITeamRepoPT {
             query.setParameter("name", name);
             query.executeUpdate();
 
-            String selectIdQuery = "SELECT LAST_INSERT_ID() as generatedId";
+            String selectIdQuery = "SELECT teamId as generatedId FROM team ORDER BY teamId DESC LIMIT 1";
             Query selectQuery = entityManager.createNativeQuery(selectIdQuery);
             generatedId = ((Number) selectQuery.getSingleResult()).intValue();
 
@@ -93,13 +93,10 @@ public class TeamJpaRepo implements ITeamRepoPT {
                 Integer personId = ((Number) row[2]).intValue();
                 String personName = (String) row[3];
                 String personFirstName = (String) row[4];
-                Integer personAge = ((Number) row[5]).intValue();
+                int personAge = ((Number) row[5]).intValue();
 
                 members.add(new PersonDN(personId, personName, personFirstName, personAge));
             }
-
-            entityManager.clear();
-            entityManager.close();
 
             result.setId(teamId);
             result.setName(teamName);

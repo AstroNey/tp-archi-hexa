@@ -19,6 +19,8 @@ public class GetTeamByIdUE {
                 throw new InvalidParamsExeception("Id must be greater than zero.");
             }
             return this.teamRepo.getTeamById(id);
+        } catch (InvalidParamsExeception e) {
+            throw e;
         } catch (Exception e) {
             throw new JobException(e.getMessage());
         }

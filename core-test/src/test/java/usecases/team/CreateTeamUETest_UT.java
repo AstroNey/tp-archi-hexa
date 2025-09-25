@@ -15,8 +15,8 @@ import usecases.UtilsTest;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,11 +28,9 @@ public class CreateTeamUETest_UT {
 
     private CreateTeamUE usecase;
 
-    private TeamDN team;
+    private final List<PersonDN> personsEmpty = List.of();
 
-    private List<PersonDN> personsEmpty = List.of();
-
-    private List<PersonDN> personsValid = List.of(
+    private final List<PersonDN> personsValid = List.of(
             new PersonDN(1, "John", "Doe", 30),
             new PersonDN(2, "Jane", "Smith", 25),
             new PersonDN(3, "Alice", "Johnson", 28),
@@ -42,7 +40,7 @@ public class CreateTeamUETest_UT {
             new PersonDN(7, "Frank", "Miller", 40)
     );
 
-    private List<PersonDN> personsInvalid = List.of(
+    private final List<PersonDN> personsInvalid = List.of(
             new PersonDN(1, "test", "Doe", 30),
             new PersonDN(2, "Jane", "Johnson", 25),
             new PersonDN(3, "Alice", "Johnson", 8),
@@ -52,7 +50,7 @@ public class CreateTeamUETest_UT {
             new PersonDN(7, "Frank", "Miller", 15)
     );
 
-    private List<PersonDN> tooLong = List.of(
+    private final List<PersonDN> tooLong = List.of(
             new PersonDN(1, "John", "Doe", 30),
             new PersonDN(2, "Jane", "Smith", 25),
             new PersonDN(3, "Alice", "Johnson", 28),
@@ -104,51 +102,37 @@ public class CreateTeamUETest_UT {
 
     @Test
     public void should_throw_exception_when_name_is_null() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute(null, personsValid);
-        });
+        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute(null, personsValid));
     }
 
     @Test
     public void should_throw_exception_when_name_is_too_short() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute("tea", personsValid);
-        });
+        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("tea", personsValid));
     }
 
     @Test
     public void should_throw_exception_when_name_is_too_long() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute("teamAteamAteamAteamAteamA", personsValid);
-        });
+        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("teamAteamAteamAteamAteamA", personsValid));
     }
 
     @Test
     public void should_throw_exception_when_persons_list_is_null() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute("teamA", null);
-        });
+        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("teamA", null));
     }
 
     @Test
     public void should_throw_exception_when_persons_list_is_empty() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute("teamA", personsEmpty);
-        });
+        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("teamA", personsEmpty));
     }
 
     @Test
     public void should_throw_exception_when_persons_list_is_too_long() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute("teamA", tooLong);
-        });
+        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("teamA", tooLong));
     }
 
     @Test
     public void should_throw_exception_when_persons_list_contains_invalid_persons() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute("teamA", personsInvalid);
-        });
+        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("teamA", personsInvalid));
     }
 }
 

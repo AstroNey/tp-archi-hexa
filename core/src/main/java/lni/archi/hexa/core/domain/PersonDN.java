@@ -9,11 +9,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PersonDN extends Domain {
 
-    private  String firstName;
     private String name;
+    private  String firstName;
     private int age;
 
-    public PersonDN(Integer id, String firstName, String name, int age) {
+    public PersonDN(Integer id, String name,String firstName, int age) {
         this.id = id;
         this.firstName = firstName;
         this.name = name;

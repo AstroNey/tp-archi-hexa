@@ -7,7 +7,7 @@ import lni.archi.hexa.core.ports.data.repositories.IPersonRepoPT;
 
 public class GetPersonByIdUE {
 
-    private IPersonRepoPT personRepo;
+    private final IPersonRepoPT personRepo;
 
     public GetPersonByIdUE(IPersonRepoPT personRepo) {
         this.personRepo = personRepo;
@@ -19,6 +19,8 @@ public class GetPersonByIdUE {
                 throw new InvalidParamsExeception("The ID must be greater than zero and not null.");
             }
             return this.personRepo.getPersonById(id);
+        } catch (InvalidParamsExeception e) {
+            throw e;
         } catch (Exception e) {
             throw new JobException(e.getMessage());
         }

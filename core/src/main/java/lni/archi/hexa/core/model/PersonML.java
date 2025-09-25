@@ -10,21 +10,21 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PersonML extends DomainML {
 
-    private  String firstName;
     private String name;
+    private  String firstName;
     private int age;
 
-    public PersonML(Integer id, String firstName, String name, int age) {
+    public PersonML(Integer id, String name, String firstName, int age) {
         this.id = id;
-        this.firstName = firstName;
         this.name = name;
+        this.firstName = firstName;
         this.age = age;
     }
 
     public PersonML(PersonDN person) {
         this.id = person.getId();
-        this.firstName = person.getFirstName();
         this.name = person.getName();
+        this.firstName = person.getFirstName();
         this.age = person.getAge();
     }
 }
