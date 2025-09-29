@@ -3,10 +3,12 @@ package usecases.team;
 import lni.archi.hexa.core.domain.PersonDN;
 import lni.archi.hexa.core.domain.TeamDN;
 import lni.archi.hexa.core.exceptions.job.InvalidParamsExeception;
+import lni.archi.hexa.core.exceptions.job.JobException;
 import lni.archi.hexa.core.usescases.team.CreateTeamUE;
 import lni.archi.hexa.data.jpa.repositories.TeamJpaRepo;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -102,37 +104,66 @@ public class CreateTeamUETest_UT {
 
     @Test
     public void should_throw_exception_when_name_is_null() {
-        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute(null, personsValid));
+        JobException exception = Assertions.assertThrows(
+                InvalidParamsExeception.class,
+                () -> this.usecase.execute(null, personsValid)
+        );
+        Assertions.assertEquals("Name must be between 5 and 20 characters and not null", exception.getMessage());
     }
 
     @Test
     public void should_throw_exception_when_name_is_too_short() {
-        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("tea", personsValid));
+        JobException exception = Assertions.assertThrows(
+                InvalidParamsExeception.class,
+                () -> this.usecase.execute("tea", personsValid)
+        );
+        Assertions.assertEquals("Name must be between 5 and 20 characters and not null", exception.getMessage());
     }
 
     @Test
     public void should_throw_exception_when_name_is_too_long() {
-        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("teamAteamAteamAteamAteamA", personsValid));
+        JobException exception = Assertions.assertThrows(
+                InvalidParamsExeception.class,
+                () -> this.usecase.execute("teamAteamAteamAteamAteamA", personsValid)
+        );
+        Assertions.assertEquals("Name must be between 5 and 20 characters and not null", exception.getMessage());
     }
 
     @Test
     public void should_throw_exception_when_persons_list_is_null() {
-        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("teamA", null));
+        JobException exception = Assertions.assertThrows(
+                InvalidParamsExeception.class,
+                () -> this.usecase.execute("teamA", null)
+        );
+        Assertions.assertEquals("Team must have at least 6 person and at most 15 persons", exception.getMessage());
     }
 
     @Test
     public void should_throw_exception_when_persons_list_is_empty() {
-        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("teamA", personsEmpty));
+        JobException exception = Assertions.assertThrows(
+                InvalidParamsExeception.class,
+                () -> this.usecase.execute("teamA", personsEmpty)
+        );
+        Assertions.assertEquals("Team must have at least 6 person and at most 15 persons", exception.getMessage());
     }
 
     @Test
     public void should_throw_exception_when_persons_list_is_too_long() {
+        JobException exception = Assertions.assertThrows(
+                InvalidParamsExeception.class,
+                () -> this.usecase.execute("teamA", tooLong)
+        );
+        Assertions.assertEquals("Team must have at least 6 person and at most 15 persons", exception.getMessage());
         assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("teamA", tooLong));
     }
 
     @Test
     public void should_throw_exception_when_persons_list_contains_invalid_persons() {
-        assertThrows(InvalidParamsExeception.class, () -> this.usecase.execute("teamA", personsInvalid));
+        JobException exception = Assertions.assertThrows(
+                InvalidParamsExeception.class,
+                () -> this.usecase.execute("teamA", personsInvalid)
+        );
+        Assertions.assertEquals("All persons in team must be at least 18 years old", exception.getMessage());
     }
 }
 

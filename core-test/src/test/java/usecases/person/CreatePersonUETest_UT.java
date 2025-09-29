@@ -1,6 +1,7 @@
 package usecases.person;
 
 import lni.archi.hexa.core.exceptions.job.InvalidParamsExeception;
+import lni.archi.hexa.core.exceptions.job.JobException;
 import lni.archi.hexa.core.usescases.person.CreatePersonUE;
 import lni.archi.hexa.core.domain.PersonDN;
 import lni.archi.hexa.data.jpa.repositories.PersonJpaRepo;
@@ -53,51 +54,62 @@ public class CreatePersonUETest_UT {
 
     @Test
     public void should_throw_exception_when_firstName_is_null() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute(null, "nicolas", 22);
-        });
+        JobException exception = assertThrows(InvalidParamsExeception.class,
+                () -> this.usecase.execute(null, "nicolas", 22)
+        );
+        assertEquals("Firstname must be between 2 and 30 characters and not null", exception.getMessage());
     }
 
     @Test
     public void should_throw_exception_when_firstName_is_too_short() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute("l", "nicolas", 22);
-        });
+        JobException exception = assertThrows(InvalidParamsExeception.class,
+                () -> this.usecase.execute("l", "nicolas", 22)
+        );
+        assertEquals("Firstname must be between 2 and 30 characters and not null", exception.getMessage());
     }
 
     @Test
     public void should_throw_exception_when_firstName_is_too_long() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute("lorentinnicolaslorentinnicolasZ", "nicolas", 22);
-        });
+        JobException exception = assertThrows(InvalidParamsExeception.class,
+                () -> this.usecase.execute("lorentinnicolaslorentinnicolasZ", "nicolas", 22)
+        );
+        assertEquals("Firstname must be between 2 and 30 characters and not null", exception.getMessage());
     }
 
     @Test
     public void should_throw_exception_when_name_is_null() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute("lorentin", null, 22);
-        });
+        JobException exception = assertThrows(InvalidParamsExeception.class,
+                () -> this.usecase.execute("lorentin", null, 22)
+        );
+        assertEquals("Name must be between 1 and 40 characters and not null", exception.getMessage());
     }
 
     @Test
     public void should_throw_exception_when_name_is_too_short() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute("lorentin", "n", 22);
-        });
+        JobException exception = assertThrows(InvalidParamsExeception.class,
+                () -> this.usecase.execute("lorentin", "n", 22)
+        );
+        assertEquals("Name must be between 1 and 40 characters and not null", exception.getMessage());
     }
 
     @Test
     public void should_throw_exception_when_name_is_too_long() {
-        assertThrows(InvalidParamsExeception.class, () -> {
-            this.usecase.execute("lorentin", "nicolasnicolasnicolasnicolasnicolasZzzzzz", 22);
-        });
+        JobException exception = assertThrows(InvalidParamsExeception.class,
+                () -> this.usecase.execute("lorentin", "nicolasnicolasnicolasnicolasnicolasZzzzzz", 22)
+        );
+        assertEquals("Name must be between 1 and 40 characters and not null", exception.getMessage());
     }
 
     @Test
     public void should_throw_exception_when_age_is_negative() {
-        assertThrows(InvalidParamsExeception.class, () -> {
+        JobException exception = assertThrows(InvalidParamsExeception.class, () -> {
+            this.usecase.execute("lorentin", "nicolas", 0);
+        });
+        assertEquals("Age must be greater than 0", exception.getMessage());
+        exception = assertThrows(InvalidParamsExeception.class, () -> {
             this.usecase.execute("lorentin", "nicolas", -1);
         });
+        assertEquals("Age must be greater than 0", exception.getMessage());
     }
 
 }

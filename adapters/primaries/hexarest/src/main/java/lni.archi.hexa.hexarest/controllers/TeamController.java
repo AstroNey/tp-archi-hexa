@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping
+@CrossOrigin(origins = "*")
 public class TeamController {
 
     private final TeamUseCases teamUseCases;

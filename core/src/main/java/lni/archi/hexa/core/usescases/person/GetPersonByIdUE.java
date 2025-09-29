@@ -16,7 +16,7 @@ public class GetPersonByIdUE {
     public PersonDN execute(int id) {
         try {
             if (id <= 0) {
-                throw new InvalidParamsExeception("The ID must be greater than zero and not null.");
+                throw new InvalidParamsExeception("The ID must be greater than zero.");
             }
             return this.personRepo.getPersonById(id);
         } catch (InvalidParamsExeception e) {

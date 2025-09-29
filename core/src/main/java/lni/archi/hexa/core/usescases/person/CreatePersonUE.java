@@ -28,24 +28,26 @@ public class CreatePersonUE {
     }
 
     private void checkParams(String firstName, String name, int age) {
-        boolean result = true;
-        String invalidParams = "";
+        checkFirstName(firstName);
+        checkName(name);
+        checkAge(age);
+    }
 
+    private void checkFirstName(String firstName) {
         if (firstName == null || firstName.length() < 2 || firstName.length() > 30) {
-            result = false;
-            invalidParams = "First name must be between 2 and 30 characters and not null";
+            throw new InvalidParamsExeception("Firstname must be between 2 and 30 characters and not null");
         }
-        if (name == null || name.length() < 2 || name.length() > 40) {
-            result = false;
-            invalidParams = "Name must be between 1 and 40 characters and not null";
-        }
-        if (age <= 0) {
-            result = false;
-            invalidParams = "Age must be greater than 0";
-        }
+    }
 
-        if (!result) {
-            throw new InvalidParamsExeception(invalidParams);
+    private void checkName(String name) {
+        if (name == null || name.length() < 2 || name.length() > 40) {
+            throw new InvalidParamsExeception("Name must be between 1 and 40 characters and not null");
+        }
+    }
+
+    private void checkAge(int age) {
+        if (age <= 0) {
+            throw new InvalidParamsExeception("Age must be greater than 0");
         }
     }
 }

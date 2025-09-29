@@ -14,13 +14,6 @@ public class PersonML extends DomainML {
     private  String firstName;
     private int age;
 
-    public PersonML(Integer id, String name, String firstName, int age) {
-        this.id = id;
-        this.name = name;
-        this.firstName = firstName;
-        this.age = age;
-    }
-
     public PersonML(PersonDN person) {
         this.id = person.getId();
         this.name = person.getName();

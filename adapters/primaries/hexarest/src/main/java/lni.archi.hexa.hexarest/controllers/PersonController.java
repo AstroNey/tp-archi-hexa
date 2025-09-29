@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping
+@CrossOrigin(origins = "*")
 public class PersonController {
 
     private final PersonUseCases personUseCases;
@@ -22,7 +23,7 @@ public class PersonController {
     }
 
 
-    @PostMapping("/person")
+    @PostMapping("/persons")
     public ResponseEntity<PersonML> createPerson(final @RequestBody PersonDN person) {
         try {
             PersonDN createdPerson = this.personUseCases.getCreatePersonUE()
@@ -35,7 +36,7 @@ public class PersonController {
         }
     }
 
-    @GetMapping("/person/{id}")
+    @GetMapping("/persons/{id}")
     public ResponseEntity<PersonML>  getPersonById(@PathVariable String id) {
         try {
             PersonML result = new PersonML(this.personUseCases.getGetPersonByIdUE().execute(Integer.parseInt(id)));

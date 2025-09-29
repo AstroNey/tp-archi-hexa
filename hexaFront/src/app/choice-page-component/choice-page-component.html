@@ -1,0 +1,39 @@
+<div class="choice-container">
+    <h1 class="title">Choose What To Do</h1>
+
+    <div class="cards-wrapper">
+        <!-- Team Card -->
+        <div
+            class="choice-card team-card"
+            (click)="onTeamSelect()">
+
+            <div class="icon-wrapper">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            </div>
+
+            <h2 class="card-title">Team</h2>
+            <p class="card-description">Collaborate with your team members</p>
+        </div>
+
+        <!-- Person Card -->
+        <div
+            class="choice-card person-card"
+            (click)="onPersonSelect()">
+
+            <div class="icon-wrapper">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+
+            <h2 class="card-title">Person</h2>
+            <p class="card-description">Work on your individual tasks</p>
+        </div>
+    </div>
+</div>

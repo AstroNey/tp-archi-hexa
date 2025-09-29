@@ -3,6 +3,7 @@ package usecases.team;
 import lni.archi.hexa.core.domain.PersonDN;
 import lni.archi.hexa.core.domain.TeamDN;
 import lni.archi.hexa.core.exceptions.job.InvalidParamsExeception;
+import lni.archi.hexa.core.exceptions.job.JobException;
 import lni.archi.hexa.core.usescases.team.GetTeamByIdUE;
 import lni.archi.hexa.data.jpa.repositories.TeamJpaRepo;
 import org.junit.Before;
@@ -14,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import usecases.UtilsTest;
 
 import java.util.List;
+import java.util.jar.JarEntry;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
@@ -78,11 +80,13 @@ public class GetTeamByIdUETest_UT {
     @Test
     public void should_throw_exception_when_id_is_invalid() {
 
-        assertThrows(InvalidParamsExeception.class, () -> {
-            usecase.execute(0);
-        });
-        assertThrows(InvalidParamsExeception.class, () -> {
-            usecase.execute(-1);
-        });
+        JobException jobException = assertThrows(InvalidParamsExeception.class,
+                () -> usecase.execute(0)
+        );
+        assertEquals("Id must be greater than zero.", jobException.getMessage());
+        assertThrows(InvalidParamsExeception.class,
+                () -> usecase.execute(-1)
+        );
+        verify(repo, org.mockito.Mockito.never()).getTeamById(org.mockito.Mockito.anyInt());
     }
 }

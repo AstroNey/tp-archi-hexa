@@ -15,11 +15,6 @@ public class TeamMLF extends TeamML {
 
     private List<PersonML> persons;
 
-    public TeamMLF(Integer id, String name, List<PersonDN> persons) {
-        super(id, name);
-        this.persons = convertPersons(persons);
-    }
-
     public TeamMLF(TeamDN team) {
         this.id = team.getId();
         this.name = team.getName();

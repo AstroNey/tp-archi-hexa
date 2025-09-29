@@ -30,30 +30,30 @@ public class CreateTeamUE {
     }
 
     private void checkParams(String name, List<PersonDN> members) {
-        boolean result = true;
-        String invalidParams = "";
+        checkName(name);
+        checkMembers(members);
+    }
 
+    private void checkName(String name) {
         if (name == null || name.length() < 5 || name.length() > 20) {
-            result = false;
-            invalidParams = "Name must be between 5 and 20 characters and not null";
+            throw new InvalidParamsExeception("Name must be between 5 and 20 characters and not null");
         }
-        if (members == null || members.size() < 6 || members.size() > 11) {
-            result = false;
-            invalidParams = "Team must have at least 6 person";
+    }
+
+    private void checkMembers(List<PersonDN> members) {
+        if (members == null || members.size() < 6 || members.size() > 15) {
+            throw new InvalidParamsExeception("Team must have at least 6 person and at most 15 persons");
         }
         else {
-            boolean isValid = true;
-            for (int i = 0; isValid && i < members.size(); i++) {
-                if (members.get(i).getAge() < 18) {
-                    isValid = false;
-                    result = false;
-                    invalidParams = "All persons in team must be at least 18 years old";
-                }
+            for (PersonDN member : members) {
+                checkMember(member);
             }
         }
+    }
 
-        if (!result) {
-            throw new InvalidParamsExeception(invalidParams);
+    private void checkMember(PersonDN member) {
+        if (member.getAge() < 18) {
+            throw new InvalidParamsExeception("All persons in team must be at least 18 years old");
         }
     }
 }

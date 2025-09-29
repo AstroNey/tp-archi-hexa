@@ -1,0 +1,22 @@
+<div class="form-container">
+    <form class="person-form">
+        <h2>New Person</h2>
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input id="name" type="text" [(ngModel)]="person$.name" name="name" required />
+        </div>
+
+        <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input id="firstName" type="text" [(ngModel)]="person$.firstName" name="firstName" required />
+        </div>
+
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input id="age" type="number" [(ngModel)]="person$.age" name="age" required />
+        </div>
+
+        <button type="button" (click)="savePerson()">Save</button>
+    </form>
+</div>

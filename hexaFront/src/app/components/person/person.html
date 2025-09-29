@@ -1,0 +1,21 @@
+<table class="styled-table">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>FirstName</th>
+        <th>Age</th>
+    </tr>
+    @if (persons$ | async; as persons) {
+        @for (person of persons; track person.id) {
+            <tr [routerLink]="['/persons/', person.id]">
+                <td>{{ person.id }}</td>
+                <td>{{ person.name }}</td>
+                <td>{{ person.firstName }}</td>
+                <td>{{ person.age }}</td>
+            </tr>
+        }
+    }
+</table>
+<div class="button-container">
+    <button [routerLink]="['/persons/new']" class="styled-button">Add Person</button>
+</div>

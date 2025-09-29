@@ -2,6 +2,7 @@ package usecases.person;
 
 import lni.archi.hexa.core.domain.PersonDN;
 import lni.archi.hexa.core.exceptions.job.InvalidParamsExeception;
+import lni.archi.hexa.core.exceptions.job.JobException;
 import lni.archi.hexa.core.usescases.person.GetPersonByIdUE;
 import lni.archi.hexa.data.jpa.repositories.PersonJpaRepo;
 import org.junit.Before;
@@ -63,12 +64,15 @@ public class GetPersonByIdUETest_UT {
 
     @Test
     public void should_throw_exception_when_id_is_invalid() {
+        JobException thrown = assertThrows(
+                InvalidParamsExeception.class,
+                () -> usecase.execute(0)
+        );
+        assertEquals("The ID must be greater than zero.", thrown.getMessage());
 
-        assertThrows(InvalidParamsExeception.class, () -> {
-            usecase.execute(0);
-        });
-        assertThrows(InvalidParamsExeception.class, () -> {
-            usecase.execute(-1);
-        });
+        assertThrows(InvalidParamsExeception.class,
+                () -> usecase.execute(-1)
+        );
+        assertEquals("The ID must be greater than zero.", thrown.getMessage());
     }
 }

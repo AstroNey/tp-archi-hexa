@@ -40,18 +40,22 @@ public class TeamJpaRepoTest {
     }
 
     @Test
-    void testCreateTeamInvalidName() {
-        assertThrows(SqlException.class, () -> repo.createTeam(null, persons), "Team name is null");
-        assertThrows(SqlException.class, () -> repo.createTeam("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", persons), "Team name is too long");
+    void should_throw_exception_when_name_is_invalid() {
+        SqlException sqlException = assertThrows(SqlException.class, () -> repo.createTeam(null, persons));
+        Assertions.assertEquals("Error while creating team", sqlException.getMessage());
+        sqlException = assertThrows(SqlException.class,
+                () -> repo.createTeam("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", persons));
+        Assertions.assertEquals("Error while creating team", sqlException.getMessage());
     }
 
     @Test
-    void testCreateTeamInvalidPersons() {
-        assertThrows(SqlException.class, () -> repo.createTeam("Dream Team", null), "Persons list is null");
+    void should_throw_exception_when_persons_is_invalid() {
+        SqlException sqlException = assertThrows(SqlException.class, () -> repo.createTeam("Dream Team", null));
+        Assertions.assertEquals("Error while linking persons to team", sqlException.getMessage());
     }
 
     @Test
-    void testCreateTeamValid() {
+    void should_create_team_when_params_is_valid() {
         TeamDN expected = new TeamDN(1, "Dream Team", persons);
         TeamDN createdTeam = repo.createTeam(expected.getName(), expected.getPersons());
         Assertions.assertNotNull(createdTeam.getId());
@@ -73,13 +77,15 @@ public class TeamJpaRepoTest {
     }
 
     @Test
-    void testGetTeamByIdNotFound() {
-        assertThrows(SqlException.class, () -> repo.getTeamById(null));
-        assertThrows(SqlException.class, () -> repo.getTeamById(-1));
+    void should_throw_exception_when_get_team_with_id_invalid() {
+        SqlException exception = assertThrows(SqlException.class, () -> repo.getTeamById(null));
+        Assertions.assertEquals("No team found with id: null", exception.getMessage());
+        exception = assertThrows(SqlException.class, () -> repo.getTeamById(-1));
+        Assertions.assertEquals("No team found with id: -1", exception.getMessage());
     }
 
     @Test
-    void testGetTeamById() {
+    void should_get_team_with_id_valid() {
         TeamDN expected = new TeamDN(1, "Dream Team", persons);
         TeamDN result = repo.getTeamById(1);
         Assertions.assertEquals(expected, result);
@@ -102,13 +108,14 @@ public class TeamJpaRepoTest {
     }
 
     @Test
-    void testGetAllTeamsEmpty() {
+    void should_throw_exception_when_no_team_found() {
         SharedTestDatabase.getEntityManager().createNativeQuery("DELETE FROM team").executeUpdate();
-        assertThrows(SqlException.class, () -> repo.getTeamById(1), "No team found");
+        SqlException exception = assertThrows(SqlException.class, () -> repo.getTeamById(1));
+        Assertions.assertEquals("No team found with id: 1", exception.getMessage());
     }
 
     @Test
-    void testGetAllTeams() {
+    void should_get_all_teams() {
         TeamDN team = new TeamDN(1, "Dream Team", persons);
 
         List<TeamDN> teams = repo.getAllTeam();
