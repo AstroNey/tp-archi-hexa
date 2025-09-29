@@ -1,0 +1,26 @@
+<div class="form-container">
+    <form class="team-form">
+        <h2>New Team</h2>
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input id="name" type="text" [(ngModel)]="team.name" name="name" required />
+        </div>
+
+        <div class="form-group">
+            <label for="personSelect">Add Person:</label>
+            <select id="personSelect" #personSelect (change)="addPerson(personSelect.value); personSelect.value=''">
+                <option value="" disabled selected>Select a person</option>
+                @if (personService.persons$ | async; as persons) {
+                    @for (person of persons; track person.id) {
+                        @if (!team.persons.includes(person)) {
+                            <option [value]="person.id">{{ person.name }}</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+
+        <button type="button" (click)="saveTeam()">Save</button>
+    </form>
+</div>

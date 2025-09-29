@@ -1,0 +1,35 @@
+<div class="team-details-container">
+    <h2>Team Details</h2>
+    @if (team$ | async; as team) {
+        <div class="team-details">
+            <div>
+                <p><strong>Id:</strong> {{ team.id }}</p>
+                <p><strong>Name:</strong> {{ team.name }}</p>
+            </div>
+            <div class="square-picture-container">
+            </div>
+        </div>
+        <div>
+            <h3>Members</h3>
+            <table class="styled-table">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>FirstName</th>
+                    <th>Age</th>
+                </tr>
+                @for (member of team.persons; track member.id) {
+                    <tr>
+                        <td>{{ member.id }}</td>
+                        <td>{{ member.name }}</td>
+                        <td>{{ member.firstName }}</td>
+                        <td>{{ member.age }}</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+    @else {
+        <p>Team details are not found...</p>
+    }
+</div>
