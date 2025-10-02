@@ -20,7 +20,7 @@ public class PersonMenu {
         this.personUseCases = personUseCases;
     }
 
-    public void menu(Scanner sc) {
+    public void menu(Scanner sc) throws InterruptedException {
         MenuUtils.clearScreen();
         System.out.println("================Person Menu================");
         System.out.print("1 - Create a person\n");
@@ -31,7 +31,7 @@ public class PersonMenu {
         switch (sc.nextInt()) {
             case 1 -> createPerson(sc);
             case 2 -> getPersonById(sc);
-            case 3 -> getAllPersons();
+            case 3 -> getAllPersons(sc);
             default -> {
                 System.out.println("Invalid choice, please try again.\n");
                 menu(sc);
@@ -39,7 +39,7 @@ public class PersonMenu {
         }
     }
 
-    private void createPerson(Scanner sc) {
+    private void createPerson(Scanner sc) throws InterruptedException {
         System.out.print("Enter the person's name: ");
         String name = sc.next();
         System.out.print("Enter the person's lastName: ");
@@ -55,13 +55,15 @@ public class PersonMenu {
             sleep(2000);
             MenuUtils.clearScreen();
         }  catch (JobException e) {
-            throw e; // TODO manage exception in menu
+            System.out.println(e.getMessage());
+            sleep(2000);
+            menu(sc);
         } catch (Exception e) {
             throw new TechException("Not managed exception.", PersonErrorMessage.NOT_MANAGED_EXCEPTION);
         }
     }
 
-    private void getPersonById(Scanner sc) {
+    private void getPersonById(Scanner sc) throws InterruptedException {
         System.out.print("Enter the person's id: ");
         int id = sc.nextInt();
         try {
@@ -72,13 +74,15 @@ public class PersonMenu {
             sleep(2000);
             MenuUtils.clearScreen();
         } catch (JobException e) {
-            throw e; // TODO manage exception in menu
+            System.out.println(e.getMessage());
+            sleep(2000);
+            menu(sc);
         } catch (Exception e) {
             throw new TechException("Not managed exception.", PersonErrorMessage.NOT_MANAGED_EXCEPTION);
         }
     }
 
-    private void getAllPersons() {
+    private void getAllPersons(Scanner sc) throws InterruptedException {
         try {
             List<PersonDN> result = this.personUseCases.getGetAllPersonUE().execute();
             MenuUtils.clearScreen();
@@ -88,7 +92,9 @@ public class PersonMenu {
             sleep(2000);
             MenuUtils.clearScreen();
         }  catch (JobException e) {
-            throw e; // TODO manage exception in menu
+            System.out.println(e.getMessage());
+            sleep(2000);
+            menu(sc);
         } catch (Exception e) {
             throw new TechException("Not managed exception.", PersonErrorMessage.NOT_MANAGED_EXCEPTION);
         }

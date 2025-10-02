@@ -1,5 +1,6 @@
 package lni.archi.hexa;
 
+import lni.archi.hexa.core.enums.exception.techException.PersonErrorMessage;
 import lni.archi.hexa.core.exceptions.tech.TechException;
 import lni.archi.hexa.menu.PersonMenu;
 import lni.archi.hexa.menu.TeamMenu;
@@ -55,6 +56,8 @@ public class Main implements CommandLineRunner {
                 System.out.println("Error: " + e.getMessage() + "\n");
                 System.out.println("Please try again.\n");
                 firstMenuPart();
+            } catch (InterruptedException e) {
+                throw new TechException("Not managed exception.", PersonErrorMessage.NOT_MANAGED_EXCEPTION);
             }
 
         } while (true);

@@ -7,6 +7,7 @@ import lni.archi.hexa.core.exceptions.job.JobException;
 import lni.archi.hexa.core.exceptions.tech.TechException;
 
 import static lni.archi.hexa.core.enums.exception.techException.PersonErrorMessage.*;
+import static lni.archi.hexa.core.enums.exception.techException.PersonErrorMessage.CANNOT_GET_ALL_PERSON_FOR_TEAM;
 import static lni.archi.hexa.core.enums.exception.techException.TeamErrorMessage.*;
 
 public class ExceptionTools {
@@ -28,6 +29,9 @@ public class ExceptionTools {
         }
         else if (errorMessage.equals(CANNOT_GET_ALL_PERSON_FOR_TEAM)) {
             return new JobException("There are a problem to get all persons to link them with new team.", PersonErrorMessage.PERSON_NOT_FOUND);
+        }
+        else if (errorMessage.equals(CANNOT_GET_ALL_PERSON_IN_TEAM)) {
+            return new JobException("There are a problem to get all persons in team.", PersonErrorMessage.PERSONS_NOT_FOUND);
         }
         else if (errorMessage.equals(CANNOT_CREATE_TEAM)) {
             return new JobException("We can't create a team.", TeamErrorMessage.CANNOT_CREATE_TEAM);

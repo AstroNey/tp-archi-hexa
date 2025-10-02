@@ -23,7 +23,7 @@ public class TeamMenu {
         this.teamUseCases = teamUseCases;
     }
 
-    public void menu(Scanner sc) {
+    public void menu(Scanner sc) throws InterruptedException {
         MenuUtils.clearScreen();
         System.out.println("================Team Menu================");
         System.out.print("1 - Create a team\n");
@@ -34,7 +34,7 @@ public class TeamMenu {
         switch (sc.nextInt()) {
             case 1 -> createTeam(sc);
             case 2 -> getTeamById(sc);
-            case 3 -> getAllTeams();
+            case 3 -> getAllTeams(sc);
             default -> {
                 System.out.println("Invalid choice, please try again.\n");
                 menu(sc);
@@ -42,7 +42,7 @@ public class TeamMenu {
         }
     }
 
-    private void createTeam(Scanner sc)  {
+    private void createTeam(Scanner sc) throws InterruptedException {
         System.out.print("Enter the team's name: ");
         String teamName = sc.next();
         List<PersonDN> members = addMembersForATeam(sc);
@@ -54,7 +54,9 @@ public class TeamMenu {
             sleep(2000);
             MenuUtils.clearScreen();
         } catch (JobException e) {
-            throw e; // TODO manage exception in menu
+            System.out.println(e.getMessage());
+            sleep(2000);
+            menu(sc);
         } catch (Exception e) {
             throw new TechException("Not managed exception.", TeamErrorMessage.NOT_MANAGED_EXCEPTION);
         }
@@ -91,7 +93,7 @@ public class TeamMenu {
         return members;
     }
 
-    private void getTeamById(Scanner sc) {
+    private void getTeamById(Scanner sc) throws InterruptedException {
         System.out.print("Enter the team's id: ");
         int id = sc.nextInt();
         try {
@@ -102,13 +104,15 @@ public class TeamMenu {
             sleep(2000);
             MenuUtils.clearScreen();
         } catch (JobException e) {
-            throw e; // TODO manage exception in menu
+            System.out.println(e.getMessage());
+            sleep(2000);
+            menu(sc);
         } catch (Exception e) {
             throw new TechException("Not managed exception.", TeamErrorMessage.NOT_MANAGED_EXCEPTION);
         }
     }
 
-    private void getAllTeams() {
+    private void getAllTeams(Scanner sc) throws InterruptedException {
         try {
             List<TeamDN> result = this.teamUseCases.getGetAllTeamUE().execute();
             MenuUtils.clearScreen();
@@ -118,7 +122,9 @@ public class TeamMenu {
             sleep(2000);
             MenuUtils.clearScreen();
         } catch (JobException e) {
-            throw e; // TODO manage exception in menu
+            System.out.println(e.getMessage());
+            sleep(2000);
+            menu(sc);
         } catch (Exception e) {
             throw new TechException("Not managed exception.", TeamErrorMessage.NOT_MANAGED_EXCEPTION);
         }

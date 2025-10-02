@@ -91,7 +91,7 @@ public class TeamMongoRepo implements ITeamRepoPT {
                 result.add(PersonMongoRepo.CreatePersonDN(personDoc));
             }
         } catch (Exception e) {
-            throw e; //TODO manage exception
+            throw new MongoDbException("Error during fetch All Teams", TeamErrorMessage.CANNOT_GET_ALL_PERSON_IN_TEAM);
         }
 
         return result;
