@@ -1,38 +1,50 @@
-import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable, tap} from 'rxjs';
-import {PersonML} from '../../models/PersonML';
+import {inject, Injectable} from '@angular/core';
+import {catchError, Observable, of, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {TeamML} from '../../models/TeamML';
+import {UtilsService} from '../utils/utils';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
-export class Team {
+export class TeamService {
     readonly API_URL = "http://127.0.0.1:8080/teams";
 
-    private teamsSubject = new BehaviorSubject<TeamML[]>([]);
-    teams$: Observable<PersonML[]> = this.teamsSubject.asObservable();
+    private subjectTeamCreated = new Subject<TeamCreatedSupplier>();
+    teamCreated$ = this.subjectTeamCreated.asObservable();
 
-    constructor(private http: HttpClient) {
+    #router: Router = inject(Router);
+    #utilsService: UtilsService = inject(UtilsService);
+    #http: HttpClient = inject(HttpClient);
+
+    announceTeamCreated(team: TeamML) {
+        this.subjectTeamCreated.next({team} as TeamCreatedSupplier);
     }
 
-    createTeam(team$: TeamML): Observable<TeamML> {
-        console.log('Payload going to service:', team$);
-        return this.http.post<TeamML>(this.API_URL, team$)
-            .pipe(
-                tap(teamCreated => {
-                    const current = this.teamsSubject.getValue();
-                    this.teamsSubject.next([...current, teamCreated]);
-                })
+    createTeam(team: TeamML): Observable<TeamML> {
+        return this.#http.post<TeamML>(this.API_URL, team).pipe(
+            catchError(error => this.#utilsService.handleError(error))
         );
     }
 
-    getAllTeams(): void {
-        this.http.get<TeamML[]>(this.API_URL).subscribe(teams => {
-            this.teamsSubject.next(teams);
-        });
+    getAllTeams(): Observable<TeamML[]> {
+        return this.#http.get<TeamML[]>(this.API_URL).pipe(
+            catchError(error => this.#utilsService.handleError(error))
+        );
     }
 
     getTeamById(id: string): Observable<TeamML> {
-        return this.http.get<TeamML>(`${this.API_URL}/${id}`);
+        return this.#http.get<TeamML>(`${this.API_URL}/${id}`).pipe(
+            catchError((error) => {
+                this.#router.navigate(['/teams']);
+                this.#utilsService.handleError(error);
+                throw of(null);
+            })
+        );
     }
+}
+
+export interface TeamCreatedSupplier {
+    team: TeamML;
 }

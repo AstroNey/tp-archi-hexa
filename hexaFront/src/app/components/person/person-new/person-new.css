@@ -32,6 +32,8 @@
     border: 1px solid #ccc;
     font-size: 14px;
     transition: border-color 0.2s;
+    background-color: #fff;
+    color: black;
 }
 
 .form-group input:focus {
@@ -57,4 +59,13 @@ button:hover {
     background: #4CAF50;
     color : white;
     border: none;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    background: #007bff;      /* couleur de fond */
+    color: white;             /* couleur de la flèche */
+    border-radius: 4px;       /* arrondi */
+    height: 20px;             /* taille */
+    width: 20px;
 }

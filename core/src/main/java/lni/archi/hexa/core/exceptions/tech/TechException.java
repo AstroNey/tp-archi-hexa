@@ -1,26 +1,15 @@
 package lni.archi.hexa.core.exceptions.tech;
 
-import lni.archi.hexa.core.enums.exception.RequestTypeE;
+import lni.archi.hexa.core.enums.exception.techException.ITechErrorMessage;
+import lombok.Getter;
 
+@Getter
 public class TechException extends RuntimeException {
 
-    private RequestTypeE typeOfRequest;
+    private final ITechErrorMessage errorMessage;
 
-    public TechException(String message) {
+    public TechException(String message, ITechErrorMessage errorMessage) {
         super(message);
-    }
-
-    public TechException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public TechException(String message, RequestTypeE typeOfRequest) {
-        super(message);
-        this.typeOfRequest = typeOfRequest;
-    }
-
-    public TechException(String message, RequestTypeE typeOfRequest, Throwable cause) {
-        super(message, cause);
-        this.typeOfRequest = typeOfRequest;
+        this.errorMessage = errorMessage;
     }
 }

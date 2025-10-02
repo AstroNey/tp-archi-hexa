@@ -1,29 +1,35 @@
-import {Component, OnInit} from '@angular/core';
-import {PersonService} from '../../../services/person/person';
-import {Observable} from 'rxjs';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs';
 import {PersonML} from '../../../models/PersonML';
-import {AsyncPipe} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
+import {PersonService} from '../../../services/person/person';
 
 @Component({
-  selector: 'app-person-details',
-    imports: [
-        AsyncPipe
-    ],
-  templateUrl: './person-details.html',
-  styleUrl: './person-details.css'
+    selector: 'app-person-details',
+    imports: [],
+    templateUrl: './person-details.html',
+    styleUrl: './person-details.css'
 })
-export class PersonDetailsComponent implements OnInit {
+export class PersonDetailsComponent implements OnInit, OnDestroy {
 
-    person$!: Observable<PersonML>;
+    #personService = Inject(PersonService);
+    #route = Inject(ActivatedRoute);
 
-    constructor(private route: ActivatedRoute,
-                private personService: PersonService) { }
-
+    private personSubscription! : Subscription;
+    person!: PersonML;
     ngOnInit(): void {
-        const id = this.route.snapshot.paramMap.get('id');
+        const id = this.#route.snapshot.paramMap.get('id');
         if (id) {
-            this.person$ = this.personService.getPersonById(id);
+            this.personSubscription = this.#personService.getPersonById(id)
+                .subscribe((res: PersonML)=> {
+                    if (res) {
+                        this.person = res;
+                    }
+                });
         }
+    }
+
+    ngOnDestroy(): void {
+        this.personSubscription.unsubscribe();
     }
 }

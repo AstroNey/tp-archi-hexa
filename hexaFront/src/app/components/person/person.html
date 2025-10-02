@@ -5,7 +5,7 @@
         <th>FirstName</th>
         <th>Age</th>
     </tr>
-    @if (persons$ | async; as persons) {
+    @if (persons) {
         @for (person of persons; track person.id) {
             <tr [routerLink]="['/persons/', person.id]">
                 <td>{{ person.id }}</td>

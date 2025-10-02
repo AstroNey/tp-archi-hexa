@@ -2,7 +2,7 @@ package lni.archi.hexa.data.jpa.repositories;
 
 import lni.archi.hexa.core.domain.PersonDN;
 import lni.archi.hexa.core.domain.TeamDN;
-import lni.archi.hexa.core.enums.exception.RequestTypeE;
+import lni.archi.hexa.core.enums.exception.techException.TeamErrorMessage;
 import lni.archi.hexa.core.exceptions.tech.SqlException;
 import lni.archi.hexa.core.ports.data.repositories.ITeamRepoPT;
 
@@ -37,7 +37,7 @@ public class TeamJpaRepo implements ITeamRepoPT {
         } catch(SqlException e) {
             throw e;
         } catch(Exception e) {
-            throw new SqlException("Error while creating team", RequestTypeE.CREATE, e.getCause());
+            throw new SqlException("Error during INSERT team", TeamErrorMessage.CANNOT_CREATE_TEAM);
         }
 
         return new TeamDN(generatedId, name, persons);
@@ -55,7 +55,7 @@ public class TeamJpaRepo implements ITeamRepoPT {
                 query.executeUpdate();
             }
         } catch(Exception e) {
-            throw new SqlException("Error while linking persons to team", RequestTypeE.CREATE, e.getCause());
+            throw new SqlException("Unable to link persons to team", TeamErrorMessage.CANNOT_LINK_PERSON_TO_TEAM);
         }
     }
 
@@ -77,11 +77,16 @@ public class TeamJpaRepo implements ITeamRepoPT {
                 """;
 
         try {
+
+            if (id == null) {
+                throw new SqlException("Team's id can't be null", TeamErrorMessage.CANNOT_GET_TEAM_BY_ID_NULL);
+            }
+
             List<Object[]> resultQ = entityManager.createNativeQuery(strQuery)
                         .setParameter("EquipeId", id)
                         .getResultList();
             if (resultQ.isEmpty()) {
-                throw new SqlException("No team found with id: " + id);
+                throw new SqlException("No team found with id: " + id, TeamErrorMessage.CANNOT_GET_TEAM_BY_ID_NOT_FOUND);
             }
 
             Object[] firstRow = resultQ.get(0);
@@ -101,8 +106,10 @@ public class TeamJpaRepo implements ITeamRepoPT {
             result.setId(teamId);
             result.setName(teamName);
             result.setPersons(members);
+        } catch (SqlException e) {
+            throw e;
         } catch (Exception e) {
-            throw new SqlException("No person found with id: " + id, RequestTypeE.FETCH, e.getCause());
+            throw new SqlException("No team found with id: " + id, TeamErrorMessage.CANNOT_GET_TEAM_BY_ID_NOT_FOUND);
         }
 
         return result;
@@ -120,7 +127,7 @@ public class TeamJpaRepo implements ITeamRepoPT {
         try {
             List<Object[]> resultQ = entityManager.createNativeQuery(strQuery).getResultList();
             if (resultQ.isEmpty()) {
-                throw new SqlException("No team found.");
+                throw new SqlException("No team found.", TeamErrorMessage.CANNOT_GET_ALL_TEAM);
             }
 
             for (Object[] row : resultQ) {
@@ -130,7 +137,7 @@ public class TeamJpaRepo implements ITeamRepoPT {
                 result.add(team);
             }
         } catch (Exception e) {
-            throw new SqlException("Failed during SQL requests for getAllTeam", RequestTypeE.FECTH_ALL ,e.getCause());
+            throw new SqlException("Error during SELECT all team", TeamErrorMessage.CANNOT_GET_ALL_TEAM);
         }
 
         return result;

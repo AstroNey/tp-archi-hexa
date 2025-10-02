@@ -34,10 +34,10 @@ class PersonJpaRepoTest {
         PersonDN personWithId = new PersonDN(1, "John", "Smith", 25);
         SqlException exception = assertThrows(SqlException.class,
                 () -> repo.createPerson(null, personWithId.getFirstName(), personWithId.getAge()));
-        Assertions.assertEquals("Failed during SQL requests for createPerson", exception.getMessage());
+        Assertions.assertEquals("Error during INSERT person", exception.getMessage());
         exception = assertThrows(SqlException.class,
                 () -> repo.createPerson("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", personWithId.getFirstName(), personWithId.getAge()));
-        Assertions.assertEquals("Failed during SQL requests for createPerson", exception.getMessage());
+        Assertions.assertEquals("Error during INSERT person", exception.getMessage());
     }
 
     @Test
@@ -45,7 +45,7 @@ class PersonJpaRepoTest {
         PersonDN personWithId = new PersonDN(1, "John", "Smith", 25);
         SqlException exception = assertThrows(SqlException.class,
                 () -> repo.createPerson(personWithId.getName(), personWithId.getFirstName(), -5));
-        Assertions.assertEquals("Failed during SQL requests for createPerson", exception.getMessage());
+        Assertions.assertEquals("Error during INSERT person", exception.getMessage());
     }
 
     @Test
@@ -53,10 +53,10 @@ class PersonJpaRepoTest {
         PersonDN personWithId = new PersonDN(1, "John", "Smith", 25);
         SqlException exception = assertThrows(SqlException.class,
                 () -> repo.createPerson(personWithId.getName(), null, personWithId.getAge()));
-        Assertions.assertEquals("Failed during SQL requests for createPerson", exception.getMessage());
+        Assertions.assertEquals("Error during INSERT person", exception.getMessage());
         exception = assertThrows(SqlException.class,
                 () -> repo.createPerson(personWithId.getName(), "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", personWithId.getAge()));
-        Assertions.assertEquals("Failed during SQL requests for createPerson", exception.getMessage());
+        Assertions.assertEquals("Error during INSERT person", exception.getMessage());
     }
 
     @Test
@@ -72,7 +72,7 @@ class PersonJpaRepoTest {
     @Test
     void testGetPersonByIdNotFound() {
         SqlException exception = assertThrows(SqlException.class, () -> repo.getPersonById(null));
-        Assertions.assertEquals("Person id is null", exception.getMessage());
+        Assertions.assertEquals("Person's id can't be null", exception.getMessage());
         exception = assertThrows(SqlException.class, () -> repo.getPersonById(999));
         Assertions.assertEquals("No person found with id: 999", exception.getMessage());
     }

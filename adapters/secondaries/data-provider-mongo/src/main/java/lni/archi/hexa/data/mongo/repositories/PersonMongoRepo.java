@@ -2,7 +2,7 @@ package lni.archi.hexa.data.mongo.repositories;
 
 import com.mongodb.client.*;
 import lni.archi.hexa.core.domain.PersonDN;
-import lni.archi.hexa.core.enums.exception.RequestTypeE;
+import lni.archi.hexa.core.enums.exception.techException.PersonErrorMessage;
 import lni.archi.hexa.core.exceptions.tech.MongoDbException;
 import lni.archi.hexa.core.ports.data.repositories.IPersonRepoPT;
 import org.bson.Document;
@@ -27,7 +27,7 @@ public class PersonMongoRepo implements IPersonRepoPT {
                     .append("age", age);
             collection.insertOne(query);
         } catch (Exception e) {
-            throw new MongoDbException("Error during create Person MongoDB", RequestTypeE.CREATE, e.getCause());
+            throw new MongoDbException("Error during Create person DOCUMENT", PersonErrorMessage.CANNOT_CREATE_PERSON);
         }
 
         return new PersonDN(generatedId, firstname, name, age);
@@ -45,11 +45,11 @@ public class PersonMongoRepo implements IPersonRepoPT {
             Document personDoc = collection.find(query).first();
 
             if (personDoc == null) {
-                throw new MongoDbException("Person not found", RequestTypeE.FETCH);
+                throw new MongoDbException("Person not found", PersonErrorMessage.CANNOT_GET_PERSON_BY_ID_NULL);
             }
             person = PersonMongoRepo.CreatePersonDN(personDoc);
         } catch (Exception e) {
-            throw new MongoDbException("Error during fecth Person MongoDB", RequestTypeE.FETCH, e.getCause());
+            throw new MongoDbException("Error during fecth Person by id", PersonErrorMessage.CANNOT_GET_PERSON_BY_ID_NOT_FOUND);
         }
 
         return person;
@@ -69,7 +69,7 @@ public class PersonMongoRepo implements IPersonRepoPT {
                 result.add(PersonMongoRepo.CreatePersonDN(personDoc));
             }
         } catch (Exception e) {
-            throw new MongoDbException("Error during request to MongoDB", RequestTypeE.FECTH_ALL,e.getCause());
+            throw new MongoDbException("Error during fecth all persons", PersonErrorMessage.CANNOT_GET_ALL_PERSON);
         }
 
         return result;

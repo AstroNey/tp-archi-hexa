@@ -3,6 +3,8 @@ package lni.archi.hexa.menu;
 import lni.archi.hexa.cleanArchi.usescases.team.TeamUseCases;
 import lni.archi.hexa.core.domain.PersonDN;
 import lni.archi.hexa.core.domain.TeamDN;
+import lni.archi.hexa.core.enums.exception.techException.TeamErrorMessage;
+import lni.archi.hexa.core.exceptions.job.JobException;
 import lni.archi.hexa.core.exceptions.tech.TechException;
 import lni.archi.hexa.core.model.TeamML;
 import lni.archi.hexa.core.model.TeamMLF;
@@ -51,8 +53,10 @@ public class TeamMenu {
             MenuUtils.printTeam(resultMLF);
             sleep(2000);
             MenuUtils.clearScreen();
+        } catch (JobException e) {
+            throw e; // TODO manage exception in menu
         } catch (Exception e) {
-            throw new TechException(e.getMessage());
+            throw new TechException("Not managed exception.", TeamErrorMessage.NOT_MANAGED_EXCEPTION);
         }
     }
 
@@ -97,8 +101,10 @@ public class TeamMenu {
             MenuUtils.printTeam(resultML);
             sleep(2000);
             MenuUtils.clearScreen();
+        } catch (JobException e) {
+            throw e; // TODO manage exception in menu
         } catch (Exception e) {
-            throw new TechException(e.getMessage());
+            throw new TechException("Not managed exception.", TeamErrorMessage.NOT_MANAGED_EXCEPTION);
         }
     }
 
@@ -111,8 +117,10 @@ public class TeamMenu {
             }
             sleep(2000);
             MenuUtils.clearScreen();
+        } catch (JobException e) {
+            throw e; // TODO manage exception in menu
         } catch (Exception e) {
-            throw new TechException(e.getMessage());
+            throw new TechException("Not managed exception.", TeamErrorMessage.NOT_MANAGED_EXCEPTION);
         }
     }
 }

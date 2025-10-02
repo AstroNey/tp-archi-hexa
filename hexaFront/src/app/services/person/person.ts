@@ -1,37 +1,49 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, tap} from 'rxjs';
+import {catchError, Observable, of, Subject} from 'rxjs';
 import {PersonML} from '../../models/PersonML';
+import {UtilsService} from '../utils/utils';
+import {Router} from '@angular/router';
 
 @Injectable({providedIn: 'root'})
 export class PersonService {
     readonly API_URL = "http://127.0.0.1:8080/persons";
 
-    private personsSubject = new BehaviorSubject<PersonML[]>([]);
-    persons$: Observable<PersonML[]> = this.personsSubject.asObservable();
+    private subjectPersonCreated = new Subject<PersonCreatedSupplier>();
+    personCreated$ = this.subjectPersonCreated.asObservable();
 
-    constructor(private http: HttpClient) {
+    #router: Router = inject(Router);
+    #utilsService: UtilsService = inject(UtilsService);
+    #http: HttpClient = inject(HttpClient);
+
+    announcePersonCreated(person: PersonML) {
+        this.subjectPersonCreated.next({person} as PersonCreatedSupplier);
     }
 
-    createPerson(person$: PersonML): Observable<PersonML> {
-        console.log('Payload going to service:', person$);
-        return this.http.post<PersonML>(this.API_URL, person$)
-            .pipe(
-                tap(personCreated => {
-                    const current = this.personsSubject.getValue();
-                    this.personsSubject.next([...current, personCreated]);
-                })
+    createPerson(person: PersonML): Observable<PersonML> {
+        return this.#http.post<PersonML>(this.API_URL, person).pipe(
+            catchError(error => this.#utilsService.handleError(error))
         );
     }
 
-    getAllperson(): void {
-        this.http.get<PersonML[]>(this.API_URL).subscribe(persons => {
-            this.personsSubject.next(persons);
-        });
+    getAllPerson(): Observable<PersonML[]> {
+        return this.#http.get<PersonML[]>(this.API_URL).pipe(
+            catchError(error => this.#utilsService.handleError(error))
+        );
     }
 
     getPersonById(id: string): Observable<PersonML> {
-        return this.http.get<PersonML>(`${this.API_URL}/${id}`);
+        return this.#http.get<PersonML>(`${this.API_URL}/${id}`).pipe(
+            catchError(error => {
+                this.#router.navigate(['/persons']);
+                this.#utilsService.handleError(error);
+                return of(error);
+            })
+        );
     }
 
+}
+
+export interface PersonCreatedSupplier {
+    person: PersonML;
 }

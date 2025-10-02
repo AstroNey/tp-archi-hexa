@@ -1,31 +1,33 @@
-import {Component, OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {TeamML} from '../../../models/TeamML';
 import {TeamService} from '../../../services/team/team';
-import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-team-details',
-    imports: [
-        AsyncPipe
-    ],
+    imports: [],
   templateUrl: './team-details.html',
   styleUrl: './team-details.css'
 })
-export class TeamDetailsComponent implements OnInit {
+export class TeamDetailsComponent implements OnInit, OnDestroy {
 
-    team$!: Observable<TeamML>;
+    private teamSubscription!: Subscription;
+    team!: TeamML;
 
-    constructor(private route: ActivatedRoute,
-                private teamService: TeamService) {
-    }
+    #route: ActivatedRoute = Inject(ActivatedRoute);
+    #teamService: TeamService = Inject(TeamService);
 
     ngOnInit(): void {
-        const id = this.route.snapshot.paramMap.get('id');
+        const id = this.#route.snapshot.paramMap.get('id');
         if (id) {
-            this.team$ = this.teamService.getTeamById(id);
-            this.team$.subscribe(team => console.log('Fetched team:', team));
+            this.teamSubscription = this.#teamService.getTeamById(id).subscribe(
+                t => this.team = t
+            );
         }
+    }
+
+    ngOnDestroy() {
+        this.teamSubscription.unsubscribe();
     }
 }

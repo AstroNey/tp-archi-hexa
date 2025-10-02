@@ -11,7 +11,14 @@
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    color-scheme: light !important;
 }
+
+.p-toast-message-error .p-toast-detail, .p-toast-message-success .p-toast-detail{
+    color: black !important;
+}
+
 
 body {
     margin: 0;

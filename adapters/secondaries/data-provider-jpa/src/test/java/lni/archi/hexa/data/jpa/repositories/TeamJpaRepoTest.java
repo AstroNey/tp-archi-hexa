@@ -42,16 +42,16 @@ public class TeamJpaRepoTest {
     @Test
     void should_throw_exception_when_name_is_invalid() {
         SqlException sqlException = assertThrows(SqlException.class, () -> repo.createTeam(null, persons));
-        Assertions.assertEquals("Error while creating team", sqlException.getMessage());
+        Assertions.assertEquals("Error during INSERT team", sqlException.getMessage());
         sqlException = assertThrows(SqlException.class,
                 () -> repo.createTeam("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", persons));
-        Assertions.assertEquals("Error while creating team", sqlException.getMessage());
+        Assertions.assertEquals("Error during INSERT team", sqlException.getMessage());
     }
 
     @Test
     void should_throw_exception_when_persons_is_invalid() {
         SqlException sqlException = assertThrows(SqlException.class, () -> repo.createTeam("Dream Team", null));
-        Assertions.assertEquals("Error while linking persons to team", sqlException.getMessage());
+        Assertions.assertEquals("Unable to link persons to team", sqlException.getMessage());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class TeamJpaRepoTest {
     @Test
     void should_throw_exception_when_get_team_with_id_invalid() {
         SqlException exception = assertThrows(SqlException.class, () -> repo.getTeamById(null));
-        Assertions.assertEquals("No team found with id: null", exception.getMessage());
+        Assertions.assertEquals("Team's id can't be null", exception.getMessage());
         exception = assertThrows(SqlException.class, () -> repo.getTeamById(-1));
         Assertions.assertEquals("No team found with id: -1", exception.getMessage());
     }

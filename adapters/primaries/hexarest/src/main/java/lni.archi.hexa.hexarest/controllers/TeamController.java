@@ -1,6 +1,7 @@
 package lni.archi.hexa.hexarest.controllers;
 
 import lni.archi.hexa.core.domain.TeamDN;
+import lni.archi.hexa.core.exceptions.job.JobException;
 import lni.archi.hexa.core.model.TeamML;
 import lni.archi.hexa.core.model.TeamMLF;
 import lni.archi.hexa.hexarest.configs.cleanArchi.usescases.team.TeamUseCases;
@@ -23,25 +24,24 @@ public class TeamController {
         this.teamUseCases = teamUseCases;
     }
 
-    @PostMapping("/team")
-    public ResponseEntity<TeamML> createTeam(final @RequestBody TeamDN team) {
+    @PostMapping("/teams")
+    public ResponseEntity<TeamML> createTeam(final @RequestBody TeamDN team) throws JobException {
         try {
             TeamDN createdTeam = this.teamUseCases.getCreateTeamUE().execute(team.getName(), team.getPersons());
             TeamMLF result = new TeamMLF(createdTeam);
-
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
     }
 
-    @GetMapping("/team/{id}")
+    @GetMapping("/teams/{id}")
     public ResponseEntity<TeamMLF> getTeamById(@PathVariable String id) {
         try {
             TeamDN receivedTeam = this.teamUseCases.getGetTeamByIdUE().execute(Integer.parseInt(id));
             return ResponseEntity.ok(new TeamMLF(receivedTeam));
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
     }
 
@@ -54,10 +54,9 @@ public class TeamController {
             for (TeamDN team : toTransform) {
                 result.add(new TeamML(team));
             }
-
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            return ResponseEntity.noContent().build();
+            throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
     }
 }

@@ -2,6 +2,8 @@ package lni.archi.hexa.menu;
 
 import lni.archi.hexa.cleanArchi.usescases.person.PersonUseCases;
 import lni.archi.hexa.core.domain.PersonDN;
+import lni.archi.hexa.core.enums.exception.techException.PersonErrorMessage;
+import lni.archi.hexa.core.exceptions.job.JobException;
 import lni.archi.hexa.core.exceptions.tech.TechException;
 import lni.archi.hexa.core.model.PersonML;
 
@@ -52,8 +54,10 @@ public class PersonMenu {
             MenuUtils.printPerson(resultML);
             sleep(2000);
             MenuUtils.clearScreen();
+        }  catch (JobException e) {
+            throw e; // TODO manage exception in menu
         } catch (Exception e) {
-            throw new TechException(e.getMessage());
+            throw new TechException("Not managed exception.", PersonErrorMessage.NOT_MANAGED_EXCEPTION);
         }
     }
 
@@ -67,8 +71,10 @@ public class PersonMenu {
             MenuUtils.printPerson(resultML);
             sleep(2000);
             MenuUtils.clearScreen();
+        } catch (JobException e) {
+            throw e; // TODO manage exception in menu
         } catch (Exception e) {
-            throw new TechException(e.getMessage());
+            throw new TechException("Not managed exception.", PersonErrorMessage.NOT_MANAGED_EXCEPTION);
         }
     }
 
@@ -81,8 +87,10 @@ public class PersonMenu {
             }
             sleep(2000);
             MenuUtils.clearScreen();
+        }  catch (JobException e) {
+            throw e; // TODO manage exception in menu
         } catch (Exception e) {
-            throw new TechException(e.getMessage());
+            throw new TechException("Not managed exception.", PersonErrorMessage.NOT_MANAGED_EXCEPTION);
         }
     }
 }

@@ -1,7 +1,7 @@
 package lni.archi.hexa.data.jpa.repositories;
 
 import lni.archi.hexa.core.domain.PersonDN;
-import lni.archi.hexa.core.enums.exception.RequestTypeE;
+import lni.archi.hexa.core.enums.exception.techException.PersonErrorMessage;
 import lni.archi.hexa.core.exceptions.tech.SqlException;
 import lni.archi.hexa.core.ports.data.repositories.IPersonRepoPT;
 
@@ -35,7 +35,7 @@ public class PersonJpaRepo implements IPersonRepoPT {
             Query selectQuery = entityManager.createNativeQuery(selectIdQuery);
             generatedId = ((Number) selectQuery.getSingleResult()).intValue();
         } catch (Exception e) {
-            throw new SqlException("Failed during SQL requests for createPerson", RequestTypeE.CREATE, e.getCause());
+            throw new SqlException("Error during INSERT person", PersonErrorMessage.CANNOT_CREATE_PERSON);
         }
 
         return new PersonDN(generatedId, name, firstname, age);
@@ -50,7 +50,7 @@ public class PersonJpaRepo implements IPersonRepoPT {
                 WHERE personId = :PersonId""");
 
         if (id == null) {
-            throw new SqlException("Person id is null", RequestTypeE.FETCH);
+            throw new SqlException("Person's id can't be null", PersonErrorMessage.CANNOT_GET_PERSON_BY_ID_NULL);
         }
         try {
             Object[] resultQ = (Object[]) entityManager.createNativeQuery(strQuery.toString())
@@ -63,7 +63,7 @@ public class PersonJpaRepo implements IPersonRepoPT {
             result.setAge((Integer) resultQ[3]);
 
         } catch (Exception e) {
-            throw new SqlException("No person found with id: " + id, RequestTypeE.FETCH, e.getCause());
+            throw new SqlException("No person found with id: " + id, PersonErrorMessage.CANNOT_GET_PERSON_BY_ID_NOT_FOUND);
         }
 
         return result;
@@ -90,7 +90,7 @@ public class PersonJpaRepo implements IPersonRepoPT {
                 ));
             });
         } catch (Exception e) {
-            throw new SqlException("Failed during SQL requests for getAllPerson", RequestTypeE.FECTH_ALL, e.getCause());
+            throw new SqlException("Error during SELECT all person", PersonErrorMessage.CANNOT_GET_ALL_PERSON);
         }
 
         return result;

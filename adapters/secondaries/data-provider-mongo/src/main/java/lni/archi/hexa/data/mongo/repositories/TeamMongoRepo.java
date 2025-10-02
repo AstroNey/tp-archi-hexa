@@ -3,7 +3,8 @@ package lni.archi.hexa.data.mongo.repositories;
 import com.mongodb.client.*;
 import lni.archi.hexa.core.domain.PersonDN;
 import lni.archi.hexa.core.domain.TeamDN;
-import lni.archi.hexa.core.enums.exception.RequestTypeE;
+import lni.archi.hexa.core.enums.exception.techException.PersonErrorMessage;
+import lni.archi.hexa.core.enums.exception.techException.TeamErrorMessage;
 import lni.archi.hexa.core.exceptions.tech.MongoDbException;
 import lni.archi.hexa.core.ports.data.repositories.ITeamRepoPT;
 import org.bson.Document;
@@ -29,7 +30,7 @@ public class TeamMongoRepo implements ITeamRepoPT {
                     .append("members", personIds);
             collection.insertOne(query);
         } catch (Exception e) {
-            throw new MongoDbException("Error during create Team MongoDB", RequestTypeE.CREATE, e.getCause());
+            throw new MongoDbException("Error during Create team DOCUMENT", TeamErrorMessage.CANNOT_CREATE_TEAM);
         }
 
         return new TeamDN(generatedId, name, persons);
@@ -47,14 +48,14 @@ public class TeamMongoRepo implements ITeamRepoPT {
             Document teamDoc = collection.find(query).first();
 
             if (teamDoc == null) {
-                throw new MongoDbException("Team not Found", RequestTypeE.FETCH);
+                throw new MongoDbException("Team not Found", TeamErrorMessage.CANNOT_GET_TEAM_BY_ID_NULL);
             }
 
             result.setId(teamDoc.getInteger("teamId"));
             result.setName(teamDoc.getString("name"));
             result.setPersons(getPersonsByIds(teamDoc.getList("members", Integer.class)));
         } catch (Exception e) {
-            throw new MongoDbException("Error during get Team by Id MongoDB", RequestTypeE.FETCH, e.getCause());
+            throw new MongoDbException("Error during fetch Team by Id", TeamErrorMessage.CANNOT_GET_TEAM_BY_ID_NOT_FOUND);
         }
 
         return result;
@@ -68,10 +69,10 @@ public class TeamMongoRepo implements ITeamRepoPT {
             long count = collection.countDocuments(query);
 
             if (count != personIds.size()) {
-                throw new MongoDbException("One or more persons do not exist", RequestTypeE.FETCH);
+                throw new MongoDbException("One or more persons not found in this team", PersonErrorMessage.CANNOT_GET_ALL_PERSON_FOR_TEAM);
             }
         } catch (Exception e) {
-            throw new MongoDbException("Error during checkIfMembersExist", RequestTypeE.FETCH, e.getCause());
+            throw new MongoDbException("Error during checkIfMembersExist()", PersonErrorMessage.CANNOT_GET_ALL_PERSON_FOR_TEAM);
         }
     }
 
@@ -90,7 +91,7 @@ public class TeamMongoRepo implements ITeamRepoPT {
                 result.add(PersonMongoRepo.CreatePersonDN(personDoc));
             }
         } catch (Exception e) {
-            throw e;
+            throw e; //TODO manage exception
         }
 
         return result;
@@ -114,7 +115,7 @@ public class TeamMongoRepo implements ITeamRepoPT {
                 result.add(teamDN);
             }
         } catch (Exception e) {
-            throw new MongoDbException("Error during getAllTeam", RequestTypeE.FECTH_ALL, e.getCause());
+            throw new MongoDbException("Error during fetch All Teams", TeamErrorMessage.CANNOT_GET_ALL_TEAM);
         }
 
         return result;

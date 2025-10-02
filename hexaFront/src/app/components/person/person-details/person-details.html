@@ -1,7 +1,7 @@
 <div class="person-details-container">
     <h2>Person Details</h2>
     <div class="person-details">
-    @if (person$ | async; as person) {
+    @if (person) {
         <div>
             <p><strong>Id:</strong> {{ person.id }}</p>
             <p><strong>Name:</strong> {{ person.name }}</p>

@@ -1,6 +1,7 @@
 package lni.archi.hexa.hexarest.controllers;
 
 import lni.archi.hexa.core.domain.PersonDN;
+import lni.archi.hexa.core.exceptions.job.JobException;
 import lni.archi.hexa.core.model.PersonML;
 import lni.archi.hexa.hexarest.configs.cleanArchi.usescases.person.PersonUseCases;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class PersonController {
 
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
     }
 
@@ -42,7 +43,7 @@ public class PersonController {
             PersonML result = new PersonML(this.personUseCases.getGetPersonByIdUE().execute(Integer.parseInt(id)));
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
     }
 
@@ -58,7 +59,7 @@ public class PersonController {
 
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            return ResponseEntity.noContent().build();
+            throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
     }
 }

@@ -1,13 +1,13 @@
-import { Component, signal } from '@angular/core';
+import {Component} from '@angular/core';
 import {RouterModule} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
+import {ToastModule} from 'primeng/toast';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterModule],
+    imports: [RouterModule, ToastModule],
     templateUrl: `./app.html`,
     styleUrl: './app.css'
 })
 export class App {
-    constructor(private http: HttpClient) { }
+
 }

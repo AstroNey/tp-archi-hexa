@@ -11,7 +11,7 @@
             <label for="personSelect">Add Person:</label>
             <select id="personSelect" #personSelect (change)="addPerson(personSelect.value); personSelect.value=''">
                 <option value="" disabled selected>Select a person</option>
-                @if (personService.persons$ | async; as persons) {
+                @if (persons) {
                     @for (person of persons; track person.id) {
                         @if (!team.persons.includes(person)) {
                             <option [value]="person.id">{{ person.name }}</option>
@@ -24,3 +24,21 @@
         <button type="button" (click)="saveTeam()">Save</button>
     </form>
 </div>
+<table class="styled-table">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>FirstName</th>
+        <th>Age</th>
+    </tr>
+    @if (team.persons) {
+        @for (person of team.persons; track person.id) {
+            <tr>
+                <td>{{ person.id }}</td>
+                <td>{{ person.name }}</td>
+                <td>{{ person.firstName }}</td>
+                <td>{{ person.age }}</td>
+            </tr>
+        }
+    }
+</table>
