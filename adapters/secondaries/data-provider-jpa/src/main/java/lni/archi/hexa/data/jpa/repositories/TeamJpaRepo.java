@@ -82,6 +82,7 @@ public class TeamJpaRepo implements ITeamRepoPT {
                 throw new SqlException("Team's id can't be null", TeamErrorMessage.CANNOT_GET_TEAM_BY_ID_NULL);
             }
 
+            @SuppressWarnings("unchecked")
             List<Object[]> resultQ = entityManager.createNativeQuery(strQuery)
                         .setParameter("EquipeId", id)
                         .getResultList();
@@ -125,6 +126,7 @@ public class TeamJpaRepo implements ITeamRepoPT {
                 ORDER BY e.teamId;
                 """;
         try {
+            @SuppressWarnings("unchecked")
             List<Object[]> resultQ = entityManager.createNativeQuery(strQuery).getResultList();
             if (resultQ.isEmpty()) {
                 throw new SqlException("No team found.", TeamErrorMessage.CANNOT_GET_ALL_TEAM);
