@@ -16,6 +16,11 @@
         }
     }
 </table>
+<div class="pagination">
+    <button (click)="prevPage()" [disabled]="page === 1">Précédent</button>
+    <span>Page {{ page }} / {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="page === totalPages">Suivant</button>
+</div>
 <div class="button-container">
     <button [routerLink]="['/persons/new']" class="styled-button">Add Person</button>
 </div>

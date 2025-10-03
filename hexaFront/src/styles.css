@@ -1,3 +1,5 @@
+@import "primeicons/primeicons.css";
+
 :root {
     --primary-color: oklch(0.746 0.002 17.209);
     --secondary-color: oklch(0.319 0.005 301.22);
@@ -19,7 +21,29 @@
     color: black !important;
 }
 
-
 body {
     margin: 0;
 }
+
+
+.custom-datagrid .dx-header-row {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.custom-datagrid .dx-row-lines:hover {
+    background-color: #4cae50 !important;
+    color: white;
+}
+
+.custom-datagrid .dx-row-lines:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.custom-datagrid td {
+    text-align: center !important;
+}
+
+
+

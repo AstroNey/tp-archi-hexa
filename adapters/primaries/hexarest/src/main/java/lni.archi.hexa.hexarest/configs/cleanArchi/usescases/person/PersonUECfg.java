@@ -3,6 +3,7 @@ package lni.archi.hexa.hexarest.configs.cleanArchi.usescases.person;
 import lni.archi.hexa.core.ports.data.repositories.IPersonRepoPT;
 import lni.archi.hexa.core.usescases.person.CreatePersonUE;
 import lni.archi.hexa.core.usescases.person.GetAllPersonUE;
+import lni.archi.hexa.core.usescases.person.GetCountPersonUE;
 import lni.archi.hexa.core.usescases.person.GetPersonByIdUE;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,14 +27,22 @@ public class PersonUECfg {
     }
 
     @Bean
+    public GetCountPersonUE getCountPersonUE(IPersonRepoPT personRepoPT) {
+        return new GetCountPersonUE(personRepoPT);
+    }
+
+    @Bean
     public PersonUseCases personUseCases(
-            CreatePersonUE createPersonUE, GetAllPersonUE getAllPersonUE,
-            GetPersonByIdUE getPersonByIdUE
+            CreatePersonUE createPersonUE,
+            GetAllPersonUE getAllPersonUE,
+            GetPersonByIdUE getPersonByIdUE,
+            GetCountPersonUE getCountPersonUE
     ) {
         PersonUseCases personUseCases = new PersonUseCases();
         personUseCases.setCreatePersonUE(createPersonUE);
         personUseCases.setGetAllPersonUE(getAllPersonUE);
         personUseCases.setGetPersonByIdUE(getPersonByIdUE);
+        personUseCases.setGetCountPersonUE(getCountPersonUE);
         return personUseCases;
     }
 }

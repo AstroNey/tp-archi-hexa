@@ -48,6 +48,10 @@ public class ExceptionTools {
         else if (errorMessage.equals(CANNOT_LINK_PERSON_TO_TEAM)) {
             return new JobException("There are a problem to link persons to the team.", TeamErrorMessage.LINK_ERROR);
         }
+        else if (errorMessage.equals(CANNOT_COUNT_PERSON)) {
+            return new JobException("There are a problem to count persons.", PersonErrorMessage.CANNOT_COUNT_PERSON);
+        }
+
 
         // need unknown error as default
         return new JobException("An unknown error occurred.", PersonErrorMessage.UNKNOWN_ERROR);

@@ -75,6 +75,45 @@ public class PersonMongoRepo implements IPersonRepoPT {
         return result;
     }
 
+    @Override
+    public List<PersonDN> getAllPerson(Integer pageLimit, Integer page) {
+        List<PersonDN> result = new ArrayList<>();
+        int offset = (page - 1) * pageLimit;
+
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = mongoClient.getDatabase("tp_hexa");
+            MongoCollection<Document> collection = db.getCollection("person");
+
+            FindIterable<Document> persons = collection.find()
+                                                        .skip(offset)
+                                                        .limit(pageLimit);
+
+            for( Document personDoc : persons ) {
+                result.add(PersonMongoRepo.CreatePersonDN(personDoc));
+            }
+        } catch (Exception e) {
+            throw new MongoDbException("Error during fecth all persons", PersonErrorMessage.CANNOT_GET_ALL_PERSON);
+        }
+
+        return result;
+    }
+
+    @Override
+    public int getCountPersonUE() {
+        int count;
+
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = mongoClient.getDatabase("tp_hexa");
+            MongoCollection<Document> collection = db.getCollection("person");
+
+            count = (int) collection.countDocuments();
+        } catch (Exception e) {
+            throw new MongoDbException("Error during count persons", PersonErrorMessage.CANNOT_COUNT_PERSON);
+        }
+
+        return count;
+    }
+
     static PersonDN CreatePersonDN(Document personDoc) {
         PersonDN person = new PersonDN();
         person.setId(personDoc.getInteger("personId"));

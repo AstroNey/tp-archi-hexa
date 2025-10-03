@@ -12,32 +12,65 @@ import {Subscription} from 'rxjs';
 })
 export class PersonComponent implements OnInit, OnDestroy {
 
-    private personsSubscription! : Subscription;
+    private personsCreatedSubscription! : Subscription;
+    private countPersonSubscription! : Subscription;
+    private getAllPersonSubscription! : Subscription;
     protected persons!: PersonML[];
 
     #personService: PersonService = inject(PersonService);
 
+    page = 1;
+    pageLimit = 5;
+    totalPages = 3;
+
     ngOnInit(): void {
-        this.initData();
+        this.initPage();
         this.initPersonCreatedSubscription();
     }
 
     ngOnDestroy(): void {
-        if (this.personsSubscription) {
-            this.personsSubscription.unsubscribe();
+        if (this.personsCreatedSubscription) {
+            this.personsCreatedSubscription.unsubscribe();
+        }
+        if (this.countPersonSubscription) {
+            this.countPersonSubscription.unsubscribe();
+        }
+        if (this.getAllPersonSubscription) {
+            this.getAllPersonSubscription.unsubscribe();
         }
     }
 
-    initData(): void {
-        this.personsSubscription = this.#personService.getAllPerson().subscribe(
-            (response: PersonML[]) => this.persons = response
-        );
-    }
-
     initPersonCreatedSubscription(): void {
-        this.personsSubscription = this.#personService.personCreated$.subscribe(
+        this.personsCreatedSubscription = this.#personService.personCreated$.subscribe(
             (response: PersonCreatedSupplier) => {
                 this.persons.push(response.person);
             });
+    }
+
+    initPage() {
+        this.countPersonSubscription = this.#personService.countAllPerson().subscribe(
+            (response: number) => {
+                this.totalPages = Math.ceil(response / this.pageLimit);
+            }
+        )
+        this.getAllPersonSubscription = this.#personService.getAllPerson(this.pageLimit, this.page).subscribe(
+            (response: PersonML[]) => {
+                this.persons = response
+            }
+        );
+    }
+
+    nextPage() {
+        if (this.page < this.totalPages) {
+            this.page++;
+            this.initPage();
+        }
+    }
+
+    prevPage() {
+        if (this.page > 1) {
+            this.page--;
+            this.initPage();
+        }
     }
 }

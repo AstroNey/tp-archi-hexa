@@ -14,13 +14,13 @@ public class RepositoriesConfig {
 
     @Bean
     public IPersonRepoPT personRepoPT() {
-        return new PersonMongoRepo();
-        //return new PersonJpaRepo();
+        //return new PersonMongoRepo();
+        return new PersonJpaRepo();
     }
 
     @Bean
     public ITeamRepoPT teamRepoPT() {
-        return new TeamMongoRepo();
-        //return new TeamJpaRepo();
+        //return new TeamMongoRepo();
+        return new TeamJpaRepo();
     }
 }

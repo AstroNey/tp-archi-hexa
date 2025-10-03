@@ -8,5 +8,6 @@ public enum PersonErrorMessage implements IJobErrorMessage {
     INVALID_FIRSTNAME,
     INVALID_NAME,
     INVALID_AGE,
+    CANNOT_COUNT_PERSON,
     CANNOT_CREATE_PERSON
 }

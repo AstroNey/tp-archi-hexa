@@ -26,6 +26,7 @@
 </div>
 <table class="styled-table">
     <tr>
+        <th></th>
         <th>Id</th>
         <th>Name</th>
         <th>FirstName</th>
@@ -34,7 +35,8 @@
     @if (team.persons) {
         @for (person of team.persons; track person.id) {
             <tr>
-                <td>{{ person.id }}</td>
+                <td (click)="deletePersonInNewTeam(person.id)" class="clickable"><span class="pi pi-trash"></span></td>
+                <td>{{ person.id }} </td>
                 <td>{{ person.name }}</td>
                 <td>{{ person.firstName }}</td>
                 <td>{{ person.age }}</td>

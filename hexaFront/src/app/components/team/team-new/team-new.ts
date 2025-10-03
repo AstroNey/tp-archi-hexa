@@ -32,7 +32,7 @@ export class TeamNewComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.personSubscription = this.#personService.getAllPerson().subscribe(
-            p => this.persons = p
+            p => this.persons = p.sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
         );
     }
 
@@ -54,6 +54,20 @@ export class TeamNewComponent implements OnInit, OnDestroy {
             });
             this.team = new TeamML();
         });
+    }
+
+    deletePersonInNewTeam(value: number){
+        const personToDelete: PersonML | undefined = this.team.persons.find(
+            (person) => {
+                return person.id === value
+            }
+        );
+        if (personToDelete) {
+            this.persons.push(personToDelete);
+            this.persons.sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""));
+        }
+        console.log(this.persons);
+        this.team.persons = this.team.persons.filter(person => person.id !== value);
     }
 
     addPerson(value: string) {

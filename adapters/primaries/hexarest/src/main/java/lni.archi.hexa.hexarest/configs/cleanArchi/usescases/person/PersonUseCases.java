@@ -2,6 +2,7 @@ package lni.archi.hexa.hexarest.configs.cleanArchi.usescases.person;
 
 import lni.archi.hexa.core.usescases.person.CreatePersonUE;
 import lni.archi.hexa.core.usescases.person.GetAllPersonUE;
+import lni.archi.hexa.core.usescases.person.GetCountPersonUE;
 import lni.archi.hexa.core.usescases.person.GetPersonByIdUE;
 import lombok.*;
 
@@ -17,4 +18,6 @@ public class PersonUseCases {
     GetAllPersonUE getAllPersonUE;
 
     GetPersonByIdUE getPersonByIdUE;
+
+    GetCountPersonUE getCountPersonUE;
 }

@@ -92,8 +92,34 @@ class PersonJpaRepoTest {
     void testGetAllPersonsEmpty() {
         // Clear the table first
         SharedTestDatabase.getEntityManager().createNativeQuery("DELETE FROM person").executeUpdate();
-        List<PersonDN> persons = repo.getAllPerson();
+        List<PersonDN> persons = repo.getAllPerson(10,1);
         Assertions.assertTrue(persons.isEmpty());
+    }
+
+    @Test
+    void testGetAllPersonsInSecondPage() {
+        // Exemple take from insert
+        PersonDN person1 = new PersonDN(4, "Johnson", "Emily", 28);
+        PersonDN person2 = new PersonDN(5, "Williams", "Michael", 35);
+        PersonDN person3 = new PersonDN(6, "Taylor", "Olivia", 27);
+
+        List<PersonDN> persons = repo.getAllPerson(3,2);
+        Assertions.assertEquals(3, persons.size());
+
+        Assertions.assertEquals(person1.getId(), persons.get(0).getId());
+        Assertions.assertEquals(person1.getName(), persons.get(0).getName());
+        Assertions.assertEquals(person1.getFirstName(), persons.get(0).getFirstName());
+        Assertions.assertEquals(person1.getAge(), persons.get(0).getAge());
+
+        Assertions.assertEquals(person2.getId(), persons.get(1).getId());
+        Assertions.assertEquals(person2.getName(), persons.get(1).getName());
+        Assertions.assertEquals(person2.getFirstName(), persons.get(1).getFirstName());
+        Assertions.assertEquals(person2.getAge(), persons.get(1).getAge());
+
+        Assertions.assertEquals(person3.getId(), persons.get(2).getId());
+        Assertions.assertEquals(person3.getName(), persons.get(2).getName());
+        Assertions.assertEquals(person3.getFirstName(), persons.get(2).getFirstName());
+        Assertions.assertEquals(person3.getAge(), persons.get(2).getAge());
     }
 
     @Test
@@ -103,7 +129,7 @@ class PersonJpaRepoTest {
         PersonDN person2 = new PersonDN(2, "Doe", "Jane", 30);
         PersonDN person3 = new PersonDN(3, "Brown", "Charlie", 22);
 
-        List<PersonDN> persons = repo.getAllPerson();
+        List<PersonDN> persons = repo.getAllPerson(6,1);
         Assertions.assertEquals(6, persons.size());
 
         Assertions.assertEquals(person1.getId(), persons.get(0).getId());

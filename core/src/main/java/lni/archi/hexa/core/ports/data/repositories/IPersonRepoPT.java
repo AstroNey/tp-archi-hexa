@@ -12,4 +12,8 @@ public interface IPersonRepoPT {
 
     List<PersonDN> getAllPerson();
 
+    List<PersonDN> getAllPerson(Integer pageLimit, Integer page);
+
+    int getCountPersonUE();
+
 }

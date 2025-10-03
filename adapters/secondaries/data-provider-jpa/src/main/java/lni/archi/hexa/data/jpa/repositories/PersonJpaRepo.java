@@ -70,8 +70,43 @@ public class PersonJpaRepo implements IPersonRepoPT {
     }
 
     @Override
+    public List<PersonDN> getAllPerson(Integer pageLimit, Integer page) {
+        List<PersonDN> result = new ArrayList<>();
+
+        Integer offset = (page - 1) * pageLimit;
+
+        StringBuilder strQuery = new StringBuilder("""
+                SELECT personId, name, firstName, age
+                FROM person
+                LIMIT :PageLimit
+                OFFSET :Offset""");
+
+        try {
+            List resultQ = entityManager.createNativeQuery(strQuery.toString())
+                                        .setParameter("PageLimit", pageLimit)
+                                        .setParameter("Offset", offset)
+                                        .getResultList();
+
+            resultQ.forEach(person -> {
+                Object[] row = (Object[]) person;
+                result.add(new PersonDN(
+                        (Integer) row[0],
+                        (String) row[1],
+                        (String) row[2],
+                        (Integer) row[3]
+                ));
+            });
+        } catch (Exception e) {
+            throw new SqlException("Error during SELECT all person", PersonErrorMessage.CANNOT_GET_ALL_PERSON);
+        }
+
+        return result;
+    }
+
+    @Override
     public List<PersonDN> getAllPerson() {
         List<PersonDN> result = new ArrayList<>();
+
         StringBuilder strQuery = new StringBuilder("""
                 SELECT personId, name, firstName, age
                 FROM person""");
@@ -94,5 +129,19 @@ public class PersonJpaRepo implements IPersonRepoPT {
         }
 
         return result;
+    }
+
+    @Override
+    public int getCountPersonUE() {
+        int count;
+        String strQuery = "SELECT COUNT(personId) FROM person";
+
+        try {
+            count = ((Number) entityManager.createNativeQuery(strQuery).getSingleResult()).intValue();
+        } catch (Exception e) {
+            throw new SqlException("Error during COUNT person", PersonErrorMessage.CANNOT_COUNT_PERSON);
+        }
+
+        return count;
     }
 }

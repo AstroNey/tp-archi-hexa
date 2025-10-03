@@ -33,6 +33,8 @@
     "@angular/ssr": "^20.3.3",
     "@primeuix/styles": "^1.2.5",
     "@primeuix/themes": "^1.2.5",
+    "devextreme": "25.1.5",
+    "devextreme-angular": "25.1.5",
     "express": "^5.1.0",
     "primeicons": "^7.0.0",
     "primeng": "^20.2.0",

@@ -143,3 +143,20 @@ button:hover {
     background-color: #4CAF50;
     color: white;
 }
+
+.styled-table .pi-trash {
+    color: red !important;
+}
+
+.styled-table td:first-child:hover {
+    background: red !important;
+}
+
+td.clickable {
+    cursor: pointer;
+}
+
+.styled-table td:first-child:hover .pi-trash {
+    color: white !important;
+}
+

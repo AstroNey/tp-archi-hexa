@@ -1,17 +1,22 @@
-<table class="styled-table">
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-    </tr>
-    @if (teams) {
-        @for (team of teams; track team.id) {
-            <tr [routerLink]="['/teams/', team.id]">
-                <td>{{ team.id }}</td>
-                <td>{{ team.name }}</td>
-            </tr>
-        }
-    }
-</table>
+<dx-data-grid
+    [showBorders]="true"
+    [showRowLines]="true"
+    [dataSource]="teams"
+    (onRowClick)="showDetails($event)"
+    class="custom-datagrid">
+
+    <dxo-paging
+        [pageSize]="2"
+        [pageIndex]="0">
+    </dxo-paging>
+
+    <dxo-pager
+        [showNavigationButtons]="true">
+    </dxo-pager>
+
+    <dxi-column dataField="id" caption="Id"></dxi-column>
+    <dxi-column dataField="name" caption="Name"></dxi-column>
+</dx-data-grid>
 <div class="button-container">
     <button [routerLink]="['/teams/new']" class="styled-button">Add Team</button>
 </div>

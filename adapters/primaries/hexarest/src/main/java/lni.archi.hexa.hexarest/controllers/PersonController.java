@@ -23,7 +23,6 @@ public class PersonController {
         this.personUseCases = personUseCases;
     }
 
-
     @PostMapping("/persons")
     public ResponseEntity<PersonML> createPerson(final @RequestBody PersonDN person) {
         try {
@@ -48,15 +47,33 @@ public class PersonController {
     }
 
     @GetMapping("/persons")
-    public ResponseEntity<List<PersonML>> getAllPersons() {
+    public ResponseEntity<List<PersonML>> getAllPersons(
+            @RequestParam(required = false) Integer pageLimit,
+            @RequestParam(required = false) Integer page){
         try {
             List<PersonML> result = new ArrayList<>();
+            List<PersonDN> toTransform;
+            if (pageLimit == null && page == null) {
+                toTransform = this.personUseCases.getGetAllPersonUE().execute();
+            }
+            else {
+                toTransform = this.personUseCases.getGetAllPersonUE().execute(pageLimit, page);
+            }
 
-            List<PersonDN> toTransform = this.personUseCases.getGetAllPersonUE().execute();
             for (PersonDN person : toTransform) {
                 result.add(new PersonML(person));
             }
 
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
+        }
+    }
+
+    @GetMapping("/persons/count")
+    public ResponseEntity<Integer> countPerson() {
+        try {
+            int result = this.personUseCases.getGetCountPersonUE().execute();
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
