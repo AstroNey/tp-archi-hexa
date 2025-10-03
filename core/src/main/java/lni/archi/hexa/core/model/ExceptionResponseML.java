@@ -1,6 +1,8 @@
 package lni.archi.hexa.core.model;
 
-import lni.archi.hexa.core.enums.exception.jobException.IJobErrorMessage;
+import lni.archi.hexa.core.exceptions.job.JobException;
 
-public record ExceptionResponseML(IJobErrorMessage jobErrorMessage, String details) {
+import java.util.List;
+
+public record ExceptionResponseML(List<JobException> exceptions, String details) {
 }

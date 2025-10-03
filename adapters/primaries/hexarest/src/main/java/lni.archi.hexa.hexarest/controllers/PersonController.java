@@ -2,6 +2,7 @@ package lni.archi.hexa.hexarest.controllers;
 
 import lni.archi.hexa.core.domain.PersonDN;
 import lni.archi.hexa.core.exceptions.job.JobException;
+import lni.archi.hexa.core.exceptions.job.JobListException;
 import lni.archi.hexa.core.model.PersonML;
 import lni.archi.hexa.hexarest.configs.cleanArchi.usescases.person.PersonUseCases;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class PersonController {
             PersonML result = new PersonML(createdPerson);
 
             return ResponseEntity.ok(result);
+        } catch (JobListException e) {
+            throw e;
         } catch (Exception e) {
             throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
@@ -41,6 +44,8 @@ public class PersonController {
         try {
             PersonML result = new PersonML(this.personUseCases.getGetPersonByIdUE().execute(Integer.parseInt(id)));
             return ResponseEntity.ok(result);
+        } catch (JobListException e) {
+            throw e;
         } catch (Exception e) {
             throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
@@ -65,6 +70,8 @@ public class PersonController {
             }
 
             return ResponseEntity.ok(result);
+        } catch (JobListException e) {
+            throw e;
         } catch (Exception e) {
             throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
@@ -75,6 +82,8 @@ public class PersonController {
         try {
             int result = this.personUseCases.getGetCountPersonUE().execute();
             return ResponseEntity.ok(result);
+        } catch (JobListException e) {
+            throw e;
         } catch (Exception e) {
             throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }

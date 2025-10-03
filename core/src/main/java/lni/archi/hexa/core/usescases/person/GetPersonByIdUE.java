@@ -5,12 +5,18 @@ import lni.archi.hexa.core.enums.exception.jobException.PersonErrorMessage;
 import lni.archi.hexa.core.exceptions.ExceptionTools;
 import lni.archi.hexa.core.exceptions.job.InvalidParamsExeception;
 import lni.archi.hexa.core.exceptions.job.JobException;
+import lni.archi.hexa.core.exceptions.job.JobListException;
 import lni.archi.hexa.core.exceptions.tech.TechException;
 import lni.archi.hexa.core.ports.data.repositories.IPersonRepoPT;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GetPersonByIdUE {
 
     private final IPersonRepoPT personRepo;
+
+    private final List<JobException> exceptions = new ArrayList<>();
 
     public GetPersonByIdUE(IPersonRepoPT personRepo) {
         this.personRepo = personRepo;
@@ -18,20 +24,22 @@ public class GetPersonByIdUE {
 
     public PersonDN execute(int id) {
         try {
+            this.exceptions.clear();
             checkId(id);
             return this.personRepo.getPersonById(id);
+        } catch (InvalidParamsExeception e) {
+            this.exceptions.add(e);
         } catch (TechException e) {
-            throw ExceptionTools.ProcessTechException(e);
-        } catch (JobException e) {
-            throw e;
+            this.exceptions.add(ExceptionTools.ProcessTechException(e));
         } catch (Exception e) {
-            throw new JobException(e.getMessage(), PersonErrorMessage.UNKNOWN_ERROR);
+            this.exceptions.add(new JobException(e.getMessage(), PersonErrorMessage.UNKNOWN_ERROR));
         }
+        throw new JobListException("Errors occurred while creating person", exceptions);
     }
 
     private void checkId(int id) {
         if (id <= 0) {
-            throw new InvalidParamsExeception("The ID must be greater than zero.", PersonErrorMessage.INVALID_ID);
+            this.exceptions.add(new InvalidParamsExeception("The ID must be greater than zero.", PersonErrorMessage.INVALID_ID));
         }
     }
 }

@@ -66,7 +66,6 @@ export class TeamNewComponent implements OnInit, OnDestroy {
             this.persons.push(personToDelete);
             this.persons.sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""));
         }
-        console.log(this.persons);
         this.team.persons = this.team.persons.filter(person => person.id !== value);
     }
 

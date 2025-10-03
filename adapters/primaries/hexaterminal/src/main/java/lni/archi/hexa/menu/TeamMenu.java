@@ -5,6 +5,7 @@ import lni.archi.hexa.core.domain.PersonDN;
 import lni.archi.hexa.core.domain.TeamDN;
 import lni.archi.hexa.core.enums.exception.techException.TeamErrorMessage;
 import lni.archi.hexa.core.exceptions.job.JobException;
+import lni.archi.hexa.core.exceptions.job.JobListException;
 import lni.archi.hexa.core.exceptions.tech.TechException;
 import lni.archi.hexa.core.model.TeamML;
 import lni.archi.hexa.core.model.TeamMLF;
@@ -53,8 +54,10 @@ public class TeamMenu {
             MenuUtils.printTeam(resultMLF);
             sleep(2000);
             MenuUtils.clearScreen();
-        } catch (JobException e) {
-            System.out.println(e.getMessage());
+        } catch (JobListException e) {
+            for (JobException je : e.getExceptions()) {
+                System.out.println(je.getMessage());
+            }
             sleep(2000);
             menu(sc);
         } catch (Exception e) {
@@ -103,8 +106,10 @@ public class TeamMenu {
             MenuUtils.printTeam(resultML);
             sleep(2000);
             MenuUtils.clearScreen();
-        } catch (JobException e) {
-            System.out.println(e.getMessage());
+        } catch (JobListException e) {
+            for (JobException je : e.getExceptions()) {
+                System.out.println(je.getMessage());
+            }
             sleep(2000);
             menu(sc);
         } catch (Exception e) {
@@ -121,8 +126,10 @@ public class TeamMenu {
             }
             sleep(2000);
             MenuUtils.clearScreen();
-        } catch (JobException e) {
-            System.out.println(e.getMessage());
+        } catch (JobListException e) {
+            for (JobException je : e.getExceptions()) {
+                System.out.println(je.getMessage());
+            }
             sleep(2000);
             menu(sc);
         } catch (Exception e) {

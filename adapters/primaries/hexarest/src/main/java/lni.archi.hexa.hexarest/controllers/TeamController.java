@@ -2,6 +2,7 @@ package lni.archi.hexa.hexarest.controllers;
 
 import lni.archi.hexa.core.domain.TeamDN;
 import lni.archi.hexa.core.exceptions.job.JobException;
+import lni.archi.hexa.core.exceptions.job.JobListException;
 import lni.archi.hexa.core.model.TeamML;
 import lni.archi.hexa.core.model.TeamMLF;
 import lni.archi.hexa.hexarest.configs.cleanArchi.usescases.team.TeamUseCases;
@@ -30,6 +31,8 @@ public class TeamController {
             TeamDN createdTeam = this.teamUseCases.getCreateTeamUE().execute(team.getName(), team.getPersons());
             TeamMLF result = new TeamMLF(createdTeam);
             return ResponseEntity.ok(result);
+        } catch (JobListException e) {
+            throw e;
         } catch (Exception e) {
             throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
@@ -40,6 +43,8 @@ public class TeamController {
         try {
             TeamDN receivedTeam = this.teamUseCases.getGetTeamByIdUE().execute(Integer.parseInt(id));
             return ResponseEntity.ok(new TeamMLF(receivedTeam));
+        } catch (JobListException e) {
+            throw e;
         } catch (Exception e) {
             throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
@@ -55,6 +60,8 @@ public class TeamController {
                 result.add(new TeamML(team));
             }
             return ResponseEntity.ok(result);
+        } catch (JobListException e) {
+            throw e;
         } catch (Exception e) {
             throw new JobException(e.getMessage(), ((JobException) e).getErrorMessage());
         }
