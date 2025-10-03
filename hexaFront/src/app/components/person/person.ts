@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {PersonCreatedSupplier, PersonService} from '../../services/person/person';
 import {PersonML} from '../../models/PersonML';
 import {RouterLink} from '@angular/router';
@@ -7,7 +7,7 @@ import {Subscription} from 'rxjs';
 @Component({
     selector: 'app-person',
     templateUrl: './person.html',
-    imports: [ RouterLink],
+    imports: [RouterLink],
     styleUrl: './person.css'
 })
 export class PersonComponent implements OnInit, OnDestroy {
@@ -15,9 +15,7 @@ export class PersonComponent implements OnInit, OnDestroy {
     private personsSubscription! : Subscription;
     protected persons!: PersonML[];
 
-    constructor(private personService: PersonService) {
-
-    }
+    #personService: PersonService = inject(PersonService);
 
     ngOnInit(): void {
         this.initData();
@@ -31,13 +29,13 @@ export class PersonComponent implements OnInit, OnDestroy {
     }
 
     initData(): void {
-        this.personsSubscription = this.personService.getAllPerson().subscribe(
+        this.personsSubscription = this.#personService.getAllPerson().subscribe(
             (response: PersonML[]) => this.persons = response
         );
     }
 
     initPersonCreatedSubscription(): void {
-        this.personsSubscription = this.personService.personCreated$.subscribe(
+        this.personsSubscription = this.#personService.personCreated$.subscribe(
             (response: PersonCreatedSupplier) => {
                 this.persons.push(response.person);
             });

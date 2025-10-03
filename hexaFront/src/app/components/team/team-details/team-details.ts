@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {TeamML} from '../../../models/TeamML';
@@ -15,8 +15,8 @@ export class TeamDetailsComponent implements OnInit, OnDestroy {
     private teamSubscription!: Subscription;
     team!: TeamML;
 
-    #route: ActivatedRoute = Inject(ActivatedRoute);
-    #teamService: TeamService = Inject(TeamService);
+    #route: ActivatedRoute = inject(ActivatedRoute);
+    #teamService: TeamService = inject(TeamService);
 
     ngOnInit(): void {
         const id = this.#route.snapshot.paramMap.get('id');

@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {TeamML} from '../../models/TeamML';
@@ -17,7 +17,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     private teamSubscription!: Subscription;
     teams!: TeamML[];
 
-    #teamService: TeamService = Inject(TeamService);
+    #teamService: TeamService = inject(TeamService);
 
     ngOnInit(): void {
         this.initData();

@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {PersonML} from '../../../models/PersonML';
 import {ActivatedRoute} from '@angular/router';
@@ -12,8 +12,8 @@ import {PersonService} from '../../../services/person/person';
 })
 export class PersonDetailsComponent implements OnInit, OnDestroy {
 
-    #personService = Inject(PersonService);
-    #route = Inject(ActivatedRoute);
+    #personService = inject(PersonService);
+    #route = inject(ActivatedRoute);
 
     private personSubscription! : Subscription;
     person!: PersonML;
